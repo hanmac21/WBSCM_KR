@@ -1189,7 +1189,7 @@ function fnTrnsForcePop(barcode,prdate){
 	code = prompt('비밀번호를 입력해주세요. 임시비밀번호는 a1234입니다. 정식 오픈 시 변경될 예정입니다.');
 	
 	if(code === 'a1234'){
-		window.open("mng_trns_jprint?barcode="+barcode+"&amount="+amount+"&memo="+memo+"&prdate="+prdate+"&sumqty="+sumqty,"Report Print",'height=900, width=1500');
+		window.open("mng_trns_jprint?barcode="+barcode+"&amount="+amount+"&memo="+encodeURIComponent(encodeURIComponent(memo))+"&prdate="+prdate+"&sumqty="+sumqty,"Report Print",'height=900, width=1500');
 	}
 	else if(code !== 'a1234'){
 		alert('비밀번호가 틀렸습니다. 비밀번호를 확인해주세요.')

@@ -204,7 +204,7 @@ public class ExcelController {
       model.addAttribute("str_dayWeek12", str_dayWeek12);
       model.addAttribute("str_dayWeek13", str_dayWeek13);
       model.addAttribute("str_dayWeek14", str_dayWeek14);
-
+System.out.println("220907"+param);
       try {
         page = Integer.parseInt(request.getParameter("page"));
 

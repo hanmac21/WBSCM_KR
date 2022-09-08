@@ -1856,7 +1856,7 @@ vertical-align:top; !important
 				if($("#chk").is(":checked")){
 					chk ="1";	
 				}
-			window.open("mng_label_jprint?pno="+pno+"&trbarcode="+trbarcode+"&memo="+memo+"&chk="+chk,"Report Print",'height=500, width=500');
+			window.open("mng_label_jprint?pno="+pno+"&trbarcode="+trbarcode+"&memo="+encodeURIComponent(encodeURIComponent(memo))+"&chk="+chk,"Report Print",'height=500, width=500');
 			//window.open("mng_label_jprint","Report Print",'height=500, width=500');
 			});
 			document.getElementById("btnLaClose").innerText = "닫기";
@@ -1872,7 +1872,7 @@ vertical-align:top; !important
 				if($("#chk").is(":checked")){
 					chk ="1";	
 				}	
-			window.open("mng_label_jprintDouble?pno="+pno+"&trbarcode="+trbarcode+"&memo="+memo+"&chk="+chk,"Report Print",'height=500, width=500');
+			window.open("mng_label_jprintDouble?pno="+pno+"&trbarcode="+trbarcode+"&memo="+encodeURIComponent(encodeURIComponent(memo))+"&chk="+chk,"Report Print",'height=500, width=500');
 			});
 
 			document.getElementById("btnLaClose").innerText = "닫기";
@@ -1892,7 +1892,8 @@ vertical-align:top; !important
 				if($("#chk").is(":checked")){
 					chk ="1";	
 				}	
-			window.open("mng_label_a4print?pno="+pno+"&trbarcode="+barcode+"&memo="+memo+"&chk="+chk,"Report Print",'height=900, width=900');
+				console.log(memo+"220908");
+			window.open("mng_label_a4print?pno="+pno+"&trbarcode="+barcode+"&memo="+encodeURIComponent(encodeURIComponent(memo))+"&chk="+chk,"Report Print",'height=900, width=900');
 			});
 			document.getElementById("btnLaClose").innerText = "닫기";
 			$("#btnLaClose").removeAttr("onclick");
@@ -1912,7 +1913,7 @@ vertical-align:top; !important
 				if($("#chk").is(":checked")){
 					chk ="1";	
 				}	
-			window.open("mng_label_a4double?pno="+pno+"&trbarcode="+barcode+"&memo="+memo+"&chk="+chk,"Report Print",'height=900, width=900');
+			window.open("mng_label_a4double?pno="+pno+"&trbarcode="+barcode+"&memo="+encodeURIComponent(encodeURIComponent(memo))+"&chk="+chk,"Report Print",'height=900, width=900');
 			});
 			document.getElementById("btnLaClose").innerText = "닫기";
 			$("#btnLaClose").removeAttr("onclick");

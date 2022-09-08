@@ -2995,7 +2995,7 @@ public class WooboTechController {
 
     String qtrbarcode = param.get("trbarcode");
     String qpno = param.get("pno");
-    String qmemo = F.nullCheck(param.get("qmemo"), "  ");
+    String qmemo = F.nullCheck(param.get("memo"), "  ");
 
     System.out.println(qtrbarcode);
     System.out.println(qpno);
@@ -3016,7 +3016,7 @@ public class WooboTechController {
       // 재스퍼로 넘길 파라미터
       paramMap.put("qpno", qpno);
       paramMap.put("qtrbarcode", qtrbarcode);
-      paramMap.put("qmemo", qmemo);
+      paramMap.put("qmemo", URLDecoder.decode(qmemo, "utf-8"));
 
       System.out.println("@@@@@@@@@@여기@@@@@@@@@@@@@");
       System.out.println(paramMap.toString());
@@ -3136,7 +3136,7 @@ public class WooboTechController {
 
     String qtrbarcode = param.get("trbarcode");
     String qpno = param.get("pno");
-    String qmemo = F.nullCheck(param.get("qmemo"), "  ");
+    String qmemo = F.nullCheck(param.get("memo"), "  ");
 
     System.out.println(qtrbarcode);
     System.out.println(qpno);
@@ -3157,7 +3157,7 @@ public class WooboTechController {
       // 재스퍼로 넘길 파라미터
       paramMap.put("qpno", qpno);
       paramMap.put("qtrbarcode", qtrbarcode);
-      paramMap.put("qmemo", qmemo);
+      paramMap.put("qmemo", URLDecoder.decode(qmemo, "utf-8"));
 
       System.out.println("@@@@@@@@@@여기@@@@@@@@@@@@@");
       System.out.println(paramMap.toString());
@@ -3227,10 +3227,10 @@ public class WooboTechController {
       Map<String, Object> paramMap = new HashMap<String, Object>();
 
       System.out.println("들어옴3");
-
+      System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@"+qmemo);
       paramMap.put("qbarcode", qbarcode);
       paramMap.put("qamount", qamount);
-      paramMap.put("qmemo", qmemo);
+      paramMap.put("qmemo",URLDecoder.decode(qmemo, "utf-8"));
       paramMap.put("qprdate", qprdate);
       paramMap.put("qsumqty", qsumqty);
 
@@ -3445,7 +3445,7 @@ public class WooboTechController {
 
     String qtrbarcode = param.get("trbarcode");
     String qpno = param.get("pno");
-    String qmemo = F.nullCheck(param.get("qmemo"), "  ");
+    String qmemo = F.nullCheck(param.get("memo"), "  ");
 
     System.out.println(qtrbarcode);
     System.out.println(qpno);
@@ -3462,10 +3462,10 @@ public class WooboTechController {
       Map<String, Object> paramMap = new HashMap<String, Object>();
 
       System.out.println("들어옴3");
-      
+      System.out.println("memo확인"+qmemo);
       paramMap.put("qpno", qpno);
       paramMap.put("qtrbarcode", qtrbarcode);
-      paramMap.put("qmemo", qmemo);
+      paramMap.put("qmemo", URLDecoder.decode(qmemo, "utf-8"));
       System.out.println(param);
       System.out.println("@@@@@@@@@@여기@@@@@@@@@@@@@");
       System.out.println(paramMap.toString());
@@ -3606,7 +3606,7 @@ public class WooboTechController {
 
     String qtrbarcode = param.get("trbarcode");
     String qpno = param.get("pno");
-    String qmemo = F.nullCheck(param.get("qmemo"), "  ");
+    String qmemo = F.nullCheck(param.get("memo"), "  ");
 
     System.out.println(qtrbarcode);
     System.out.println(qpno);
@@ -3626,7 +3626,7 @@ public class WooboTechController {
 
       paramMap.put("qpno", qpno);
       paramMap.put("qtrbarcode", qtrbarcode);
-      paramMap.put("qmemo", qmemo);
+      paramMap.put("qmemo", URLDecoder.decode(qmemo, "utf-8"));
 
       System.out.println("@@@@@@@@@@여기@@@@@@@@@@@@@");
       System.out.println(paramMap.toString());
