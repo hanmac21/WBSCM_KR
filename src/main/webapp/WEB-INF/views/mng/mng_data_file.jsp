@@ -891,6 +891,7 @@
 	 	var s_contents = $('#s_contents').val();
 		var pageView = "mng_data_file_table";
 		var itemCountPerPage =  $('#itemCountPerPage').val();
+		FunLoadingBarStart();
 		$.ajax({
 			type : "post",
 			url : "mng_data_file",
@@ -907,6 +908,7 @@
 		}).done(function(data) {
 			$("#tabledata").html("");
 			$("#tabledata").html(data);
+			FunLoadingBarEnd();
 			//	$('td.number').number( true, 0 );
 			//	$('span.number').number( true, 0 );
 		});

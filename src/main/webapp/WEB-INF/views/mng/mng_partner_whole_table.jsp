@@ -14,7 +14,7 @@
 												<th style="text-align: center; font-size: 18x;">순번</th>
 												<th style="text-align: center; font-size: 18x;">협력사</th>
 												<th style="text-align: center; font-size: 18x;">업종</th>
-												<th style="text-align: center; font-size: 18x;">업태</th>
+												<th style="text-align: center; font-size: 18x;">사업자번호</th>
 												<th style="text-align: center; font-size: 18x;">대표자</th>
 												<th style="text-align: center; font-size: 18x;">주소</th>
 												<th style="text-align: center; font-size: 18x;">출발지</th>

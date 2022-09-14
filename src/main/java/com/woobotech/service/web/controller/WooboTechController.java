@@ -2981,18 +2981,30 @@ public class WooboTechController {
   public String mng_label_jprint(HttpServletRequest request, Locale lopcale, Model model,
       @RequestParam Map<String, String> param, String chk) {
     logger.info("Jasper label print Strat@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    HttpSession session = request.getSession();
+    String code = (String)session.getAttribute("cu_code");
 
     // 파일 있는 곳에 pdf 파일 만들어줌
     String templatePath = "";
     String destPath = "";
-    if(chk.equals("1")) {
-      templatePath = "/report/WB_Label_9x7_AS.jrxml";
-      destPath = "/report/WB_Label_9x7_AS.pdf";
-    }else {
-      templatePath = "/report/WB_Label_9x7.jrxml";
-      destPath = "/report/WB_Label_9x7.pdf";
+    if(code.equals("4201")) {
+      System.out.println("들어옴1");
+      if(chk.equals("1")) {
+        templatePath = "/report/WB_Label_90x55_AS.jrxml";
+        destPath = "/report/WB_Label_90x55_AS.pdf";
+      }else {
+        templatePath = "/report/WB_Label_90x55.jrxml";
+        destPath = "/report/WB_Label_90x55.pdf";
+      }
+    }else{System.out.println("들어옴2");
+      if(chk.equals("1")) {
+        templatePath = "/report/WB_Label_9x7_AS.jrxml";
+        destPath = "/report/WB_Label_9x7_AS.pdf";
+      }else {
+        templatePath = "/report/WB_Label_9x7.jrxml";
+        destPath = "/report/WB_Label_9x7.pdf";
+      }
     }
-
     String qtrbarcode = param.get("trbarcode");
     String qpno = param.get("pno");
     String qmemo = F.nullCheck(param.get("memo"), "  ");
@@ -3120,18 +3132,31 @@ public class WooboTechController {
   public String mng_label_jprintDouble(HttpServletRequest request, Locale lopcale, Model model,
       @RequestParam Map<String, String> param, String chk) {
     logger.info("Jasper label print Strat@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-
+    HttpSession session = request.getSession();
+    String code = (String)session.getAttribute("cu_code");
     // 파일 있는 곳에 pdf 파일 만들어줌
     String templatePath = "";
     String destPath = "";
-    if(chk.equals("1")) {
+    if(code.equals("4201")) {
+      if(chk.equals("1")) {
+          templatePath = "/report/WB_Label_90x55_Double_AS.jrxml";
+          destPath = "/report/WB_Label_90x55_Double_AS.pdf";
+  
+      }else {
+          templatePath = "/report/WB_Label_90x55_Double.jrxml";
+          destPath = "/report/WB_Label_90x55_Double.pdf";
+  
+      }
+    }else {
+      if(chk.equals("1")) {
         templatePath = "/report/WB_Label_9x7_Double_AS.jrxml";
         destPath = "/report/WB_Label_9x7_Double_AS.pdf";
 
-    }else {
-        templatePath = "/report/WB_Label_9x7_Double.jrxml";
-        destPath = "/report/WB_Label_9x7_Double.pdf";
-
+      }else {
+          templatePath = "/report/WB_Label_9x7_Double.jrxml";
+          destPath = "/report/WB_Label_9x7_Double.pdf";
+  
+      }
     }
 
     String qtrbarcode = param.get("trbarcode");
@@ -3277,17 +3302,29 @@ public class WooboTechController {
 
   // 라벨바코드 재발행 - 라벨 프린터 인쇄
   @RequestMapping(value = "/mng_label_rejprint")
-  public String mng_label_rejprint(Locale locale, Model model,
+  public String mng_label_rejprint(HttpServletRequest request, Locale locale, Model model,
       @RequestParam Map<String, String> param,String chk) throws SQLException {
     logger.info("Jasper label reprint Strat@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     String templatePath = "";
     String destPath = "";
-    if(chk.equals("1")) {
-      templatePath = "/report/WB_Label_9x7_AS.jrxml";
-      destPath = "/report/WB_Label_9x7_AS.pdf";
+    HttpSession session = request.getSession();
+    String code = (String)session.getAttribute("cu_code");
+    if(code.equals("4201")) {
+      if(chk.equals("1")) {
+        templatePath = "/report/WB_Label_90x55_AS.jrxml";
+        destPath = "/report/WB_Label_90x55_AS.pdf";
+      }else {
+        templatePath = "/report/WB_Label_90x55.jrxml";
+        destPath = "/report/WB_Label_90x55.pdf";
+      }
     }else {
-      templatePath = "/report/WB_Label_9x7.jrxml";
-      destPath = "/report/WB_Label_9x7.pdf";
+      if(chk.equals("1")) {
+        templatePath = "/report/WB_Label_9x7_AS.jrxml";
+        destPath = "/report/WB_Label_9x7_AS.pdf";
+      }else {
+        templatePath = "/report/WB_Label_9x7.jrxml";
+        destPath = "/report/WB_Label_9x7.pdf";
+      }
     }
 
    

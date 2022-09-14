@@ -856,7 +856,7 @@ table{
 	});
 	
 	function jtrnsprint(barcode, memo){
-		//var memo = document.getElementById('p_memo2').innerText;
+		var memo = document.getElementById('p_memo').innerText;
 			
 		//var amount = ((({board.size()} / 10) + 1) * 10);
 		var prdate = $("#outdate").val();

@@ -2152,6 +2152,22 @@ vertical-align:top; !important
 			prdate   = $("#outdate").val();
 			branch = getCookie("branch");
 			
+			// 협력사 한곳만 선택 가능
+			var custcodeChk = new Array();//납품처코드
+			var custcodeTemp = "";
+			for (var i = 1; i < $('#tablebody').find('tr').size(); i++) {
+				var chk = $('#tablebody').find('tr').eq(i).children().find('table').children().find('.tr').eq(check_find).find('input[type="checkbox"]').is(':checked');
+				if (chk == true) {
+					custcodeChk[i] = $('#tablebody').find('tr').eq(i).find('.custcode').text();
+					if(custcodeTemp == ""){
+						custcodeTemp = custcodeChk[i];
+					}else if(custcodeTemp != custcodeChk[i]){
+						alert("하나의 거래명세서에는 한곳의 협력사만 선택할 수 있습니다.");
+						return;
+					}
+				}
+			}
+			
 			//alert(tqty2);
 			//alert(i_qty);
 			console.log(prdate +"aa"+indate);

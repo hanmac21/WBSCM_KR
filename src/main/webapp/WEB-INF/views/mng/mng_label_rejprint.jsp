@@ -19,14 +19,23 @@
 		out.clear();
 		out=pageContext.pushBody();
 		String chk = request.getParameter("chk");
+		String code = (String)session.getAttribute("cu_code");
 
 		try{
 			String fileName = "";
-			if(chk.equals("1")){
-		           fileName = "/report/WB_Label_9x7_AS.pdf";
-		}else{
-			fileName = "/report/WB_Label_9x7.pdf";
-		}
+			if(code.equals("4201")){
+				if(chk.equals("1")){
+			           fileName = "/report/WB_Label_90x55_AS.pdf";
+				}else{
+					fileName = "/report/WB_Label_90x55.pdf";
+				}
+			}else{
+				if(chk.equals("1")){
+			           fileName = "/report/WB_Label_9x7_AS.pdf";
+				}else{
+					fileName = "/report/WB_Label_9x7.pdf";
+				}
+			}
 			File file = new File(fileName);
 			
 			response.setContentType("application/pdf");

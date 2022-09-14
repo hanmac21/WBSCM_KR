@@ -625,7 +625,7 @@ public class WooboTechDao {
 
       info.setCu_sangho(rs.getString("cu_sangho"));
       info.setCu_upjong(rs.getString("cu_upjong"));
-      info.setCu_uptae(rs.getString("cu_uptae"));
+      info.setCu_uptae(rs.getString("cu_sano"));
       info.setCu_master(rs.getString("cu_master"));
       info.setCu_juso(rs.getString("cu_juso"));
       info.setCustcode(rs.getString("custcode"));
@@ -16733,7 +16733,7 @@ public class WooboTechDao {
     sql.append(
         "select t.* from (select ROWNUM as row_seq, x.* from																												 \n");
     sql.append(
-        "(SELECT C.CU_SANGHO, C.CU_UPJONG, C.CU_UPTAE, C.CU_MASTER																						 \n");
+        "(SELECT C.CU_SANGHO, C.CU_UPJONG, C.CU_SANO, C.CU_MASTER																						 \n");
     sql.append(
         "	   ,A.AREA																																	 \n");
     sql.append(
@@ -16773,7 +16773,7 @@ public class WooboTechDao {
     }
 
     if (!"".equals(cu_code)) {
-      sql.append(" AND UPPER(C.CU_CODE) LIKE '%'||");
+      sql.append(" AND UPPER(C.CU_SANO) LIKE '%'||");
       sql.append("UPPER('");
       sql.append(cu_code);
       sql.append("')");

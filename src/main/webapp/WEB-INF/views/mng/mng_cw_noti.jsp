@@ -859,6 +859,7 @@
 		var pageView = "mng_cw_noti_table";
 		var itemCountPerPage =  $('#itemCountPerPage').val();
 		var custname =  $('#p_cu_sangho').val();
+		FunLoadingBarStart();
 		$.ajax({
 			type : "post",
 			url : "mng_cw_noti",
@@ -877,6 +878,7 @@
 		}).done(function(data) {
 			$("#tabledata").html("");
 			$("#tabledata").html(data);
+			FunLoadingBarEnd();
 			//	$('td.number').number( true, 0 );
 			//	$('span.number').number( true, 0 );
 		});
