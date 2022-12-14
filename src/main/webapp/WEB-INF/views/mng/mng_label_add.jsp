@@ -151,7 +151,7 @@
 						
 						<div class="box-footer" style="text-align: center;">
 							<div>
-							<button type="button" class="btn btn-info"
+							<button type="button" class="btn btn-info" id="printBtn"
 									onclick="fnLabelPrint()" style="margin-right: 20px; height: 50px;width:100px;">발행</button>
 							<button type="button" class="btn btn-success"
 									onclick="fnclose()" style="width:100px; height: 50px" id="cnl">취소</button>
@@ -220,6 +220,13 @@
 	    //$('input[name=p_custname]').attr('value',payment);
 			
 	 });
+	
+	/* var printBtn = document.querySelector("#printBtn");
+	printBtn.addEventListener("click", function (e) {
+	    this.setAttribute("disabled", "disabled");
+	    //폼 서밋
+	}); */
+	
 	// 쿠키 가져오기 함수
 	function getCookie(cName) {
 		cName = cName + '=';

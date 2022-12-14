@@ -2474,7 +2474,13 @@ vertical-align:top; !important
 		} */
 				
 		//라벨 출력
+		var isRun = false;
 		function fnLabelPrint() {
+			if(isRun ==true){
+				return;
+			}
+			console.log(isRun);
+			
 			$('#label_text'+label_idx).text("발행완료");
 			//$('#label_2text'+label_idx).text("발행완료");
 			var itemname = $("#p_itemname2").val();
@@ -2634,7 +2640,7 @@ vertical-align:top; !important
 				alert("생산일자를 입력해주세요");
 				return;
 			}
-			
+			isRun = true;
 			$.ajax({
 				type : "post",
 				url : "mng_label_print",
@@ -2662,6 +2668,7 @@ vertical-align:top; !important
 					production3:production3,
 				}
 			}).done(function(data) {
+				isRun = false;
 				$("#modalPop").html("");
 				$("#modalPop").modal('hide');
 				$("#modalPop2").html("");

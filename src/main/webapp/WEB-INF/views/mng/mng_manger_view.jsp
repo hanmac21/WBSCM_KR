@@ -130,9 +130,10 @@
 							</select></td>
 					</tr>
 					<tr ><th style="width:50%; text-align:center" class="mng3 manageV">라벨용지</th>
-						<td class="mng4 manageV"><select id="ment" style="width:180px;">
-								<option value="우보테크" ${ment =='002' ? 'selected' :'' }>9x7</option>
-								<option value="우보테크[<%=text %>]"  ${ment =='000' ? 'selected' :'' }>9x5.5</option>
+						<td class="mng4 manageV">
+							<select id="labelType" style="width:180px;">
+								<option value="A" ${board.labelType =='A' ? 'selected' :'' }>9x7</option>
+								<option value="B" ${board.labelType =='B' ? 'selected' :'' }>9x5.5</option>
 							</select></td>
 					</tr>
 					<tr ><td colspan=2 style="height:40px;"></td></tr>

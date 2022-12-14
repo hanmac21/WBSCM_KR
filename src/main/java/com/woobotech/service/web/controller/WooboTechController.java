@@ -2011,7 +2011,7 @@ public class WooboTechController {
     }
 
     ArrayList<LabelDTO> arrList_Label = dao.get_Label_list(param);
-    
+    dao.tradeintf_u(param);
     for (int i = 0; i < arrList_Label.size(); i++) {
       String barcodeString = arrList_Label.get(i).getBarcode();
       try {
@@ -2983,12 +2983,17 @@ public class WooboTechController {
     logger.info("Jasper label print Strat@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     HttpSession session = request.getSession();
     String code = (String)session.getAttribute("cu_code");
-
+    
     // 파일 있는 곳에 pdf 파일 만들어줌
     String templatePath = "";
     String destPath = "";
-    if(code.equals("4201")) {
-      System.out.println("들어옴1");
+    WooboTechDao wdao = new WooboTechDao();
+    String labelType = wdao.labelType(code);
+    request.setAttribute("labelType", labelType);
+    String label = (String) request.getAttribute("labelType");
+    System.out.println("221207확인"+label);
+    if(labelType.equals("B")) {
+      System.out.println("들어옴B");
       if(chk.equals("1")) {
         templatePath = "/report/WB_Label_90x55_AS.jrxml";
         destPath = "/report/WB_Label_90x55_AS.pdf";
@@ -2996,7 +3001,7 @@ public class WooboTechController {
         templatePath = "/report/WB_Label_90x55.jrxml";
         destPath = "/report/WB_Label_90x55.pdf";
       }
-    }else{System.out.println("들어옴2");
+    }else{System.out.println("들어옴A");
       if(chk.equals("1")) {
         templatePath = "/report/WB_Label_9x7_AS.jrxml";
         destPath = "/report/WB_Label_9x7_AS.pdf";
@@ -3008,7 +3013,7 @@ public class WooboTechController {
     String qtrbarcode = param.get("trbarcode");
     String qpno = param.get("pno");
     String qmemo = F.nullCheck(param.get("memo"), "  ");
-
+    System.out.println("들어옴B"+templatePath);
     System.out.println(qtrbarcode);
     System.out.println(qpno);
 
@@ -3137,7 +3142,13 @@ public class WooboTechController {
     // 파일 있는 곳에 pdf 파일 만들어줌
     String templatePath = "";
     String destPath = "";
-    if(code.equals("4201")) {
+    WooboTechDao wdao = new WooboTechDao();
+    String labelType = wdao.labelType(code);
+    request.setAttribute("labelType", labelType);
+    String label = (String) request.getAttribute("labelType");
+    System.out.println("221207확인"+label);
+    if(labelType.equals("B")) {
+      System.out.println("들어옴B");
       if(chk.equals("1")) {
           templatePath = "/report/WB_Label_90x55_Double_AS.jrxml";
           destPath = "/report/WB_Label_90x55_Double_AS.pdf";
@@ -3309,7 +3320,13 @@ public class WooboTechController {
     String destPath = "";
     HttpSession session = request.getSession();
     String code = (String)session.getAttribute("cu_code");
-    if(code.equals("4201")) {
+    WooboTechDao wdao = new WooboTechDao();
+    String labelType = wdao.labelType(code);
+    request.setAttribute("labelType", labelType);
+    String label = (String) request.getAttribute("labelType");
+    System.out.println("221207확인"+label);
+    if(labelType.equals("B")) {
+      System.out.println("들어옴B");
       if(chk.equals("1")) {
         templatePath = "/report/WB_Label_90x55_AS.jrxml";
         destPath = "/report/WB_Label_90x55_AS.pdf";

@@ -19,6 +19,15 @@ public class MangerDTO {
   private String user3;
   private String user4;
   private String user5;
+  private String labelType;
+
+  public String getLabelType() {
+    return labelType;
+  }
+
+  public void setLabelType(String labelType) {
+    this.labelType = labelType;
+  }
 
   public String getP_deliveryhour() {
     return p_deliveryhour;

@@ -1003,6 +1003,7 @@ function fnTrnsPop(barcode,prdate){
 	//</c:forEach>
 	
 	//alert(cnt);
+	var memo = document.getElementById('p_memo').innerText;
 	var all = document.getElementById("all").value;
 	all = all*1;
 	//alert(all);
@@ -1061,7 +1062,7 @@ function fnTrnsPop(barcode,prdate){
 		cnt = 5;
 		$("#print1").removeAttr("onclick");
 		$("#print1").attr("onclick","fnTrnsRePop('${barcode}','${prdate}');");
-		window.open("mng_trns_jprint?barcode="+barcode+"&amount="+amount+"&memo="+memo+"&prdate="+prdate+"&sumqty="+sumqty,"Report Print",'height=900, width=1500');
+		window.open("mng_trns_jprint?barcode="+barcode+"&amount="+amount+"&memo="+encodeURIComponent(encodeURIComponent(memo))+"&prdate="+prdate+"&sumqty="+sumqty,"Report Print",'height=900, width=1500');
 		//window.open("mng_print?barcode="+barcode+"&prdate="+prdate+"&memo2="+memo2,  "new", "toolbar=no, menubar=no, scrollbars=yes, resizable=no,left=0, top=0",'height=' + screen.height + ',width=' + screen.width + 'fullscreen=yes');
 	}else{
 		alert("라벨을 모두 발행해주세요!");
@@ -1124,7 +1125,7 @@ function fnTrnsRePop(barcode,prdate){
 	}else{
 		alert("라벨을 먼저 발행해주세요!");
 	} */
-	window.open("mng_trns_jprint?barcode="+barcode+"&amount="+amount+"&memo="+memo+"&prdate="+prdate+"&sumqty="+sumqty,"Report Print",'height=500, width=500');
+	window.open("mng_trns_jprint?barcode="+barcode+"&amount="+amount+"&memo="+encodeURIComponent(encodeURIComponent(memo))+"&prdate="+prdate+"&sumqty="+sumqty,"Report Print",'height=500, width=500');
 	//alert(${board});
 	//var all = Object.keys(${board}).length;
 	//alert(all);

@@ -822,6 +822,7 @@ table{
 		if(lacnt>=1){
 			//document.getElementById("${vo.itemcode1 }+reTrnsBtn").style.display="block";
 			document.getElementById("${vo.itemcode1 }+reTrnsBtn").disabled=false;
+			console.log("221102재발행 확인");
 			//document.getElementById("labelPrintAll").disabled=false;
 			document.getElementById("label_text${n}").innerText = '발행';
 		}else{

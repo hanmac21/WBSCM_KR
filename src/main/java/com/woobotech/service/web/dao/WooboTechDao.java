@@ -220,7 +220,7 @@ public class WooboTechDao {
       info.setDay13c(StringUtil.nvl(rs.getString(35), "0"));
       info.setDay14(StringUtil.nvl(rs.getString(36), "0"));
       info.setDay14c(StringUtil.nvl(rs.getString(37), "0"));
-     // info.setChanged(rs.getString("changed"));
+      // info.setChanged(rs.getString("changed"));
       info.setCarname(rs.getString("carname"));
       return info;
     }
@@ -441,7 +441,7 @@ public class WooboTechDao {
       info.setUser3(rs.getString("user3"));
       info.setUser4(rs.getString("user4"));
       info.setUser5(rs.getString("user5"));
-
+      info.setLabelType(rs.getString("labeltype"));
       return info;
     }
   };
@@ -614,7 +614,7 @@ public class WooboTechDao {
       info.setBarcode(rs.getString("barcode"));
       info.setTrbarcode(rs.getString("trbarcode"));
       info.setIndate(rs.getString("indate"));
-      System.out.println("220616확인"+rs.getString("indate"));
+      System.out.println("220616확인" + rs.getString("indate"));
       return info;
     }
   };
@@ -658,8 +658,8 @@ public class WooboTechDao {
       return info;
     }
   };
-  
-  // 220622 반출증     
+
+  // 220622 반출증
   private RowMapper mapper21 = new RowMapper() {
     public ExportDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
       ExportDTO info = new ExportDTO();
@@ -774,7 +774,7 @@ public class WooboTechDao {
 
   // 거래명세서 재발행 데이터
   public List<TrnsDTO> mng_re_trns_data(Map<String, String> param) {
-  //★★★★★삭제예정220725★★★★★
+    // ★★★★★삭제예정220725★★★★★
     // 211101 주소값이 안나와서 쿼리 수정
     // StringBuffer sql = new StringBuffer();
     // String barcode =param.get("barcode");
@@ -858,8 +858,8 @@ public class WooboTechDao {
     return (List<TrnsDTO>) this.jdbcTemplate.query(sql.toString(), this.mapper13);
 
   }
-  
-  //반출증 220622 데이터가 없어서 임시              쿼리 수정해야함
+
+  // 반출증 220622 데이터가 없어서 임시 쿼리 수정해야함
   public List<ExportDTO> mng_export_data(Map<String, String> param) {
     StringBuffer sql = new StringBuffer();
     String barcode = param.get("qprbarcode");
@@ -917,6 +917,7 @@ public class WooboTechDao {
     return (List<ExportDTO>) this.jdbcTemplate.query(sql.toString(), this.mapper21);
 
   }
+
   public int mng_re_trns_count(Map<String, String> param) {
 
     String gubun = F.nullCheck(param.get("gubun"), "");
@@ -1059,11 +1060,12 @@ public class WooboTechDao {
       String email3 = F.nullCheck(map.get("email3"), " ");
       String email4 = F.nullCheck(map.get("email4"), " ");
       String email5 = F.nullCheck(map.get("email5"), " ");
-      String user1 = F.nullCheck(map.get("user1")," ");
-      String user2 = F.nullCheck(map.get("user2")," ");
-      String user3 = F.nullCheck(map.get("user3")," ");
-      String user4 = F.nullCheck(map.get("user4")," ");
-      String user5 = F.nullCheck(map.get("user5")," ");
+      String user1 = F.nullCheck(map.get("user1"), " ");
+      String user2 = F.nullCheck(map.get("user2"), " ");
+      String user3 = F.nullCheck(map.get("user3"), " ");
+      String user4 = F.nullCheck(map.get("user4"), " ");
+      String user5 = F.nullCheck(map.get("user5"), " ");
+      String labelType =  F.nullCheck(map.get("labelType"), "A");
       System.out.println("u_deliverymin : " + u_deliverymin);
 
       String new_pw = map.get("new_pw");
@@ -1100,7 +1102,7 @@ public class WooboTechDao {
       sql.append("update T_SCM_CUST \n");
       sql.append(
           "  set p_deliveryhour=?, p_deliverymin=?,u_deliveryhour=?, u_deliverymin=?, area=?, email1=?, email2=?, email3=?, email4=?, email5=?,"
-          + "user1 = ?,user2 = ?,user3 = ?,user4 = ?,user5 = ?   \n");
+              + "user1 = ?,user2 = ?,user3 = ?,user4 = ?,user5 = ?, labeltype=?   \n");
       if (!"".equals(mod_pw)) {
         sql.append(", CUSTPW ='");
         sql.append(mod_pw);
@@ -1125,7 +1127,9 @@ public class WooboTechDao {
       stmtx.setString(index++, user3);
       stmtx.setString(index++, user4);
       stmtx.setString(index++, user5);
+      stmtx.setString(index++, labelType);
       stmtx.setString(index++, custcode);
+      
 
       System.out.println(sql.toString());
       if (stmtx.executeUpdate() > 0) {
@@ -1158,7 +1162,7 @@ public class WooboTechDao {
 
   }
 
-  // 사용자관리                  //배송출발 시간 설정
+  // 사용자관리 //배송출발 시간 설정
   public MangerDTO mng_manger_view(Map<String, String> param) {
 
     StringBuffer sql = new StringBuffer();
@@ -1181,6 +1185,7 @@ public class WooboTechDao {
     sql.append("     ,user3                 \n");
     sql.append("     ,user4                 \n");
     sql.append("     ,user5                 \n");
+    sql.append("     ,labeltype                 \n");
     sql.append(" from T_SCM_CUST          \n");
     sql.append(" where custcode='");
     sql.append(cust_code);
@@ -1190,7 +1195,8 @@ public class WooboTechDao {
     return (MangerDTO) this.jdbcTemplate.query(sql.toString(), this.mapper10).get(0);
 
   }
-//구매계획관리 - 거래명세서  비고적용
+
+  // 구매계획관리 - 거래명세서 비고적용
   public int mng_trns_memo_u(Map<String, String> map) {
 
     int result = -1;
@@ -1230,45 +1236,25 @@ public class WooboTechDao {
         if (stmtx.executeUpdate() > 0) {
           result = 1;
           logger.info("▷▶▷▶▷▶ 수정성공");
-        //★★★★★삭제예정220725★★★★★ 울산 평택디비
-          Class.forName(DRIVER);
-          try {
-            conn = DriverManager.getConnection(URL, USER, PW);
-            conn.setAutoCommit(false);
-            pstmt = conn.prepareStatement(sql.toString());
-            index = 1;
-            pstmt.setString(index++, memo);
-            pstmt.setString(index++, barcode);
-
-            pstmt.executeUpdate();
-            pstmt.close();
-            conn.commit();
-            conn.close();
-
-          } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
-          }
-
-          Class.forName(DRIVER2);
-          try {
-            conn = DriverManager.getConnection(URL2, USER2, PW2);
-            conn.setAutoCommit(false);
-            pstmt = conn.prepareStatement(sql.toString());
-            index = 1;
-            pstmt.setString(index++, memo);
-            pstmt.setString(index++, barcode);
-
-            pstmt.executeUpdate();
-            pstmt.close();
-            conn.commit();
-            conn.close();
-
-          } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
-          }
-        //★★★★★삭제예정220725★★★★★ 울산 평택디비
+          // ★★★★★삭제예정220725★★★★★ 울산 평택디비
+          /*
+           * Class.forName(DRIVER); try { conn = DriverManager.getConnection(URL, USER, PW);
+           * conn.setAutoCommit(false); pstmt = conn.prepareStatement(sql.toString()); index = 1;
+           * pstmt.setString(index++, memo); pstmt.setString(index++, barcode);
+           * 
+           * pstmt.executeUpdate(); pstmt.close(); conn.commit(); conn.close();
+           * 
+           * } catch (Exception e) { // TODO: handle exception e.printStackTrace(); }
+           * 
+           * Class.forName(DRIVER2); try { conn = DriverManager.getConnection(URL2, USER2, PW2);
+           * conn.setAutoCommit(false); pstmt = conn.prepareStatement(sql.toString()); index = 1;
+           * pstmt.setString(index++, memo); pstmt.setString(index++, barcode);
+           * 
+           * pstmt.executeUpdate(); pstmt.close(); conn.commit(); conn.close();
+           * 
+           * } catch (Exception e) { // TODO: handle exception e.printStackTrace(); }
+           */
+          // ★★★★★삭제예정220725★★★★★ 울산 평택디비
         } else {
           result = -2;
           logger.info("▷▶▷▶▷▶수정 실패 :");
@@ -1300,6 +1286,7 @@ public class WooboTechDao {
     return result;
 
   }
+
   // 구매관리계획 - 거래명세서 - 발행 순번 용 메모
   public int mng_trns_memo2_u(Map<String, String> map) {
 
@@ -1366,8 +1353,8 @@ public class WooboTechDao {
 
     return result;
   }
-  
-  //구매계획관리 - 거래명세서 작성일자 업데이트 220620
+
+  // 구매계획관리 - 거래명세서 작성일자 업데이트 220620
   public int mng_trns_memo3_u(Map<String, String> map) {
 
     int result = -1;
@@ -2060,7 +2047,7 @@ public class WooboTechDao {
 
   }
 
-  // 게시판 조회수        //협력사게시판 조회수
+  // 게시판 조회수 //협력사게시판 조회수
   public void hit_brd(Map<String, String> param) throws SQLException {
 
     Connection conx = null;
@@ -2146,49 +2133,33 @@ public class WooboTechDao {
 
           result = 1;
           logger.info("▷▶▷▶▷▶ 수정성공");
-        //★★★★★삭제예정220725★★★★★ 울산 평택디비
-          Class.forName(DRIVER);
-
-          try {
-            Connection conn2 = DriverManager.getConnection(URL, USER, PW);
-            conn2.setAutoCommit(false);
-            pstmt = conn2.prepareStatement(sql.toString());
-
-            index = 1;
-            pstmt.setString(index++, dstate);
-            pstmt.setString(index++, dtime3);
-            pstmt.setString(index++, deliveryno);
-
-            pstmt.executeUpdate();
-            pstmt.close();
-            conn2.commit();
-            conn2.close();
-
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
-
-          Class.forName(DRIVER2);
-
-          try {
-            Connection conn2 = DriverManager.getConnection(URL2, USER2, PW2);
-            conn2.setAutoCommit(false);
-            pstmt = conn2.prepareStatement(sql.toString());
-
-            index = 1;
-            pstmt.setString(index++, dstate);
-            pstmt.setString(index++, dtime3);
-            pstmt.setString(index++, deliveryno);
-
-            pstmt.executeUpdate();
-            pstmt.close();
-            conn2.commit();
-            conn2.close();
-
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
-        //★★★★★삭제예정220725★★★★★ 울산 평택디비
+          // ★★★★★삭제예정220725★★★★★ 울산 평택디비
+          /*
+           * Class.forName(DRIVER);
+           * 
+           * try { Connection conn2 = DriverManager.getConnection(URL, USER, PW);
+           * conn2.setAutoCommit(false); pstmt = conn2.prepareStatement(sql.toString());
+           * 
+           * index = 1; pstmt.setString(index++, dstate); pstmt.setString(index++, dtime3);
+           * pstmt.setString(index++, deliveryno);
+           * 
+           * pstmt.executeUpdate(); pstmt.close(); conn2.commit(); conn2.close();
+           * 
+           * } catch (Exception e) { e.printStackTrace(); }
+           * 
+           * Class.forName(DRIVER2);
+           * 
+           * try { Connection conn2 = DriverManager.getConnection(URL2, USER2, PW2);
+           * conn2.setAutoCommit(false); pstmt = conn2.prepareStatement(sql.toString());
+           * 
+           * index = 1; pstmt.setString(index++, dstate); pstmt.setString(index++, dtime3);
+           * pstmt.setString(index++, deliveryno);
+           * 
+           * pstmt.executeUpdate(); pstmt.close(); conn2.commit(); conn2.close();
+           * 
+           * } catch (Exception e) { e.printStackTrace(); }
+           */
+          // ★★★★★삭제예정220725★★★★★ 울산 평택디비
         } else {
           result = -2;
           logger.info("▷▶▷▶▷▶수정 실패 :");
@@ -2218,8 +2189,8 @@ public class WooboTechDao {
     return result;
 
   }
-  
-  ////★★★★★삭제예정220725★★★★★ mng_delivery 관련
+
+  //// ★★★★★삭제예정220725★★★★★ mng_delivery 관련
   public int mng_delivery_state_u(Map<String, String> map) {
 
     int result = -1;
@@ -2282,49 +2253,31 @@ public class WooboTechDao {
           result = 1;
           logger.info("▷▶▷▶▷▶ 수정성공");
 
-          Class.forName(DRIVER);
-
-          try {
-            Connection conn2 = DriverManager.getConnection(URL, USER, PW);
-            conn2.setAutoCommit(false);
-            pstmt = conn2.prepareStatement(sql.toString());
-
-            index = 1;
-            pstmt.setString(index++, dstate);
-            pstmt.setString(index++, dtime);
-            pstmt.setString(index++, dtime2);
-            pstmt.setString(index++, deliveryno);
-
-            pstmt.executeUpdate();
-            pstmt.close();
-            conn2.commit();
-            conn2.close();
-
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
-
-          Class.forName(DRIVER2);
-
-          try {
-            Connection conn2 = DriverManager.getConnection(URL2, USER2, PW2);
-            conn2.setAutoCommit(false);
-            pstmt = conn2.prepareStatement(sql.toString());
-
-            index = 1;
-            pstmt.setString(index++, dstate);
-            pstmt.setString(index++, dtime);
-            pstmt.setString(index++, dtime2);
-            pstmt.setString(index++, deliveryno);
-
-            pstmt.executeUpdate();
-            pstmt.close();
-            conn2.commit();
-            conn2.close();
-
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
+          /*
+           * Class.forName(DRIVER);
+           * 
+           * try { Connection conn2 = DriverManager.getConnection(URL, USER, PW);
+           * conn2.setAutoCommit(false); pstmt = conn2.prepareStatement(sql.toString());
+           * 
+           * index = 1; pstmt.setString(index++, dstate); pstmt.setString(index++, dtime);
+           * pstmt.setString(index++, dtime2); pstmt.setString(index++, deliveryno);
+           * 
+           * pstmt.executeUpdate(); pstmt.close(); conn2.commit(); conn2.close();
+           * 
+           * } catch (Exception e) { e.printStackTrace(); }
+           * 
+           * Class.forName(DRIVER2);
+           * 
+           * try { Connection conn2 = DriverManager.getConnection(URL2, USER2, PW2);
+           * conn2.setAutoCommit(false); pstmt = conn2.prepareStatement(sql.toString());
+           * 
+           * index = 1; pstmt.setString(index++, dstate); pstmt.setString(index++, dtime);
+           * pstmt.setString(index++, dtime2); pstmt.setString(index++, deliveryno);
+           * 
+           * pstmt.executeUpdate(); pstmt.close(); conn2.commit(); conn2.close();
+           * 
+           * } catch (Exception e) { e.printStackTrace(); }
+           */
 
         } else {
           result = -2;
@@ -2355,7 +2308,8 @@ public class WooboTechDao {
     return result;
 
   }
-//★★★★★삭제예정220725★★★★★ mng_delivery_dt관련
+
+  // ★★★★★삭제예정220725★★★★★ mng_delivery_dt관련
   public List<DeliveryDTO> mng_delivery_dt(Map<String, String> param) {
     StringBuffer sql = new StringBuffer();
     String deliveryno = param.get("deliveryno");
@@ -2390,7 +2344,7 @@ public class WooboTechDao {
 
   }
 
-  // 배송 카운트                 ★★★★★삭제예정220725★★★★★ mng_delivery관련
+  // 배송 카운트 ★★★★★삭제예정220725★★★★★ mng_delivery관련
   public int mng_delivery_count(Map<String, String> param) {
 
     String gubun = F.nullCheck(param.get("gubun"), "");
@@ -2405,7 +2359,7 @@ public class WooboTechDao {
     return this.jdbcTemplate.queryForObject(sql.toString(), Integer.class);
   }
 
-  // 배송     ★★★★★삭제예정220725★★★★★ mng_delivery관련
+  // 배송 ★★★★★삭제예정220725★★★★★ mng_delivery관련
   public List<NotiDTO> mng_delivery(Map<String, String> param, int page, int itemCountPerPage) {
     StringBuffer sql = new StringBuffer();
     int end = page * itemCountPerPage;
@@ -2477,6 +2431,7 @@ public class WooboTechDao {
     return (List<NotiDTO>) this.jdbcTemplate.query(sql.toString(), this.mapper6);
 
   }
+
   // 재고조회 건수
   public int mng_stock_plan_count(String[] arrDay, Map<String, String> param) {
 
@@ -4278,6 +4233,7 @@ public class WooboTechDao {
     System.out.println(sql.toString());
     return this.jdbcTemplate.queryForObject(sql.toString(), Integer.class);
   }
+
   // 재고조회 데이터
   public List<StockDTO> mng_stock_plan(String[] arrDay, Map<String, String> param, int page,
       int itemCountPerPage) {
@@ -8739,7 +8695,9 @@ public class WooboTechDao {
     sql.append(
         "    FROM    (                                                                                                                                                                                                                                                 \n");
     sql.append(
-        "                SELECT DISTINCT A.GUBUN, A.BRANCH, '' MWNO, A.MACHINE, A.ITEMCODE, A.CONDATE, A.PLANQTY             ,A.changed                                                              \n");      //220629 생산계획관리 변경분시도
+        "                SELECT DISTINCT A.GUBUN, A.BRANCH, '' MWNO, A.MACHINE, A.ITEMCODE, A.CONDATE, A.PLANQTY             ,A.changed                                                              \n"); // 220629
+                                                                                                                                                                                                           // 생산계획관리
+                                                                                                                                                                                                           // 변경분시도
     sql.append(
         "                FROM (                                                                                                                                                                                                                                        \n");
     sql.append(
@@ -9648,7 +9606,7 @@ public class WooboTechDao {
 
   }
 
-//협력사 게시글 등록 협력사찾기
+  // 협력사 게시글 등록 협력사찾기
   public List<CuSanghoDTO> mng_cu_sangho(Map<String, String> param) {
     StringBuffer sql = new StringBuffer();
     String cu_sangho = param.get("cu_sangho");
@@ -9789,7 +9747,7 @@ public class WooboTechDao {
 
   }
 
-  // 공지사항 수정    .    협력사 게시판 수정
+  // 공지사항 수정 . 협력사 게시판 수정
   public int mng_noti_dt_u(HttpServletRequest request, Map<String, String> map, String uploadPath) {
 
     int result = -1;
@@ -10145,7 +10103,7 @@ public class WooboTechDao {
 
   }
 
-  // 공지사항 댓글 가져오기       // 협력사 게시판 댓글 가져오기
+  // 공지사항 댓글 가져오기 // 협력사 게시판 댓글 가져오기
   public List<QnADTO> mng_noti_qna(Map<String, String> param) {
     StringBuffer sql = new StringBuffer();
 
@@ -10413,7 +10371,7 @@ public class WooboTechDao {
 
   }
 
-  // 공지사항 댓글 수정      // 협력사 게시판 댓글 수정
+  // 공지사항 댓글 수정 // 협력사 게시판 댓글 수정
   public int mng_noti_qna_u(HttpServletRequest request, Map<String, String> map,
       String uploadPath) {
     int result = -1;
@@ -10492,7 +10450,7 @@ public class WooboTechDao {
 
   }
 
-  // 공지사항 댓글 삭제         // 협력사 게시판 댓글 삭제
+  // 공지사항 댓글 삭제 // 협력사 게시판 댓글 삭제
   public int mng_noti_qna_d(HttpServletRequest request, Map<String, String> map,
       String uploadPath) {
     int result = -1;
@@ -10573,7 +10531,7 @@ public class WooboTechDao {
 
   }
 
-  // 공지사항 댓글 입력         ,         // 협력사 게시판 댓글 입력
+  // 공지사항 댓글 입력 , // 협력사 게시판 댓글 입력
   public int mng_noti_qna_add_i(HttpServletRequest request, Map<String, String> map,
       String uploadPath) {
 
@@ -10643,6 +10601,7 @@ public class WooboTechDao {
     return result;
 
   }
+
   // 공지사항 글 등록
   public int mng_noti_add_i(HttpServletRequest request, Map<String, String> map,
       String uploadPath) {
@@ -10793,13 +10752,13 @@ public class WooboTechDao {
       sql.setLength(0);
       sql.append("insert into T_SCM_DELIVERY_MAX (indate, deliveryno) values(?,?)");
       ps2 = conx.prepareStatement(sql.toString());
-
+      System.out.println("확인2" + sql.toString());
       sql.setLength(0);
       sql.append("update T_SCM_DELIVERY_MAX \n");
       sql.append("  set deliveryno=deliveryno +1 \n");
       sql.append(" where indate =? ");
       ps3 = conx.prepareStatement(sql.toString());
-
+      System.out.println("확인3" + sql.toString());
       sql.setLength(0);
       sql.append(
           "insert into T_SCM_DELIVERY (DELIVERYNO,INDATE,CNO,CNAME,PNO,PNAME,QTY,DSTATE,TRADEBARCODE) values(?,?,?,?,?,?,?,?,?)");
@@ -10807,7 +10766,7 @@ public class WooboTechDao {
       // (DELIVERYNO,INDATE,CNO,CNAME,PNO,PNAME,QTY,DSTATE,DTIME,DTIME2)
       // values(?,?,?,?,?,?,?,?,?,?)");
       ps4 = conx.prepareStatement(sql.toString());
-
+      System.out.println("확인4" + sql.toString());
       ps.setString(1, indate);
       rs = ps.executeQuery();
       String deliveryno = "";
@@ -10824,17 +10783,20 @@ public class WooboTechDao {
             throw new Exception("▷▶▷▶▷▶ 배송 채번  실패");
           }
         } else {
-
+          System.out.println("확인0" + sql.toString());
           ps3.setString(1, indate);
           logger.info("▷▶▷▶▷▶배송 채번 수정 성공");
           if (ps3.executeUpdate() <= 0) {
             logger.info("▷▶▷▶▷▶배송 채번 수정 실패");
             throw new Exception("▷▶▷▶▷▶ 배송 채번  수정실패");
           }
+          System.out.println("확인0");
         }
+        System.out.println("확인00");
       }
-
+      System.out.println("확인1");
       deliveryno = String.format("%03d", Integer.parseInt(deliveryno));
+      System.out.println("확인2");
       for (int i = 0; i < arrList.size(); i++) {
         DeliveryDTO info = arrList.get(i);
 
@@ -10855,80 +10817,84 @@ public class WooboTechDao {
           logger.info("▷▶▷▶▷▶배송 저장 실패");
           throw new Exception("▷▶▷▶▷▶ 배송 저장  실패");
         }
-      //★★★★★삭제예정220726★★★★★ 울산 평택디비
+        // ★★★★★삭제예정220726★★★★★ 울산 평택디비
 
-        if (map.get("branch").equals("000")) {
-          Class.forName(DRIVER);
-
-          try {
-            Connection conn = DriverManager.getConnection(URL, USER, PW);
-            conn.setAutoCommit(false);
-
-            sql.setLength(0);
-            sql.append(
-                "insert into T_SCM_DELIVERY (DELIVERYNO,INDATE,CNO,CNAME,PNO,PNAME,QTY,DSTATE,TRADEBARCODE,USEYN) values(?,?,?,?,?,?,?,?,?,?)");
-
-            ps5 = conn.prepareStatement(sql.toString());
-            index = 1;
-
-            ps5.setString(index++, indate + deliveryno);
-            ps5.setString(index++, info.getIndate());
-            ps5.setString(index++, info.getCno());
-            ps5.setString(index++, info.getCname());
-            ps5.setString(index++, info.getPno());
-            ps5.setString(index++, info.getPname());
-            ps5.setString(index++, info.getQty());
-            ps5.setString(index++, info.getDstate());
-            ps5.setString(index++, info.getTradebarcode());
-            ps5.setString(index++, "Y");
-
-            ps5.executeUpdate();
-
-            conn.commit();
-            ps5.close();
-            conn.close();
-
-          } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
-          }
-        } else {
-          Class.forName(DRIVER2);
-
-          try {
-            Connection conn = DriverManager.getConnection(URL2, USER2, PW2);
-            conn.setAutoCommit(false);
-
-            sql.setLength(0);
-            sql.append(
-                "insert into T_SCM_DELIVERY (DELIVERYNO,INDATE,CNO,CNAME,PNO,PNAME,QTY,DSTATE,TRADEBARCODE,USEYN) values(?,?,?,?,?,?,?,?,?,?)");
-
-            ps5 = conn.prepareStatement(sql.toString());
-            index = 1;
-
-            ps5.setString(index++, indate + deliveryno);
-            ps5.setString(index++, info.getIndate());
-            ps5.setString(index++, info.getCno());
-            ps5.setString(index++, info.getCname());
-            ps5.setString(index++, info.getPno());
-            ps5.setString(index++, info.getPname());
-            ps5.setString(index++, info.getQty());
-            ps5.setString(index++, info.getDstate());
-            ps5.setString(index++, info.getTradebarcode());
-            ps5.setString(index++, "Y");
-
-            ps5.executeUpdate();
-
-            conn.commit();
-            ps5.close();
-            conn.close();
-
-          } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
-          }
-        }
-      //★★★★★삭제예정220726★★★★★ 울산 평택디비끝
+        // if (map.get("branch").equals("000")) {
+        // Class.forName(DRIVER);
+        //
+        // try {
+        // Connection conn = DriverManager.getConnection(URL, USER, PW);
+        // conn.setAutoCommit(false);
+        //
+        // sql.setLength(0);
+        // sql.append(
+        // "insert into T_SCM_DELIVERY
+        // (DELIVERYNO,INDATE,CNO,CNAME,PNO,PNAME,QTY,DSTATE,TRADEBARCODE,USEYN)
+        // values(?,?,?,?,?,?,?,?,?,?)");
+        //
+        // ps5 = conn.prepareStatement(sql.toString());
+        // index = 1;
+        //
+        // ps5.setString(index++, indate + deliveryno);
+        // ps5.setString(index++, info.getIndate());
+        // ps5.setString(index++, info.getCno());
+        // ps5.setString(index++, info.getCname());
+        // ps5.setString(index++, info.getPno());
+        // ps5.setString(index++, info.getPname());
+        // ps5.setString(index++, info.getQty());
+        // ps5.setString(index++, info.getDstate());
+        // ps5.setString(index++, info.getTradebarcode());
+        // ps5.setString(index++, "Y");
+        //
+        // ps5.executeUpdate();
+        //
+        // conn.commit();
+        // ps5.close();
+        // conn.close();
+        //
+        // } catch (Exception e) {
+        // // TODO: handle exception
+        // e.printStackTrace();
+        // }
+        // } else {
+        // Class.forName(DRIVER2);
+        //
+        // try {
+        // Connection conn = DriverManager.getConnection(URL2, USER2, PW2);
+        // conn.setAutoCommit(false);
+        //
+        // sql.setLength(0);
+        // sql.append(
+        // "insert into T_SCM_DELIVERY
+        // (DELIVERYNO,INDATE,CNO,CNAME,PNO,PNAME,QTY,DSTATE,TRADEBARCODE,USEYN)
+        // values(?,?,?,?,?,?,?,?,?,?)");
+        //
+        // ps5 = conn.prepareStatement(sql.toString());
+        // index = 1;
+        //
+        // ps5.setString(index++, indate + deliveryno);
+        // ps5.setString(index++, info.getIndate());
+        // ps5.setString(index++, info.getCno());
+        // ps5.setString(index++, info.getCname());
+        // ps5.setString(index++, info.getPno());
+        // ps5.setString(index++, info.getPname());
+        // ps5.setString(index++, info.getQty());
+        // ps5.setString(index++, info.getDstate());
+        // ps5.setString(index++, info.getTradebarcode());
+        // ps5.setString(index++, "Y");
+        //
+        // ps5.executeUpdate();
+        //
+        // conn.commit();
+        // ps5.close();
+        // conn.close();
+        //
+        // } catch (Exception e) {
+        // // TODO: handle exception
+        // e.printStackTrace();
+        // }
+        // }
+        // ★★★★★삭제예정220726★★★★★ 울산 평택디비끝
 
       }
 
@@ -11065,97 +11031,67 @@ public class WooboTechDao {
           }
 
           /* System.out.println(map.get("branch")); */
-        //★★★★★삭제예정220726★★★★★ 울산 평택디비
-          if (map.get("branch").equals("000")) {
-
-            Class.forName(DRIVER);
-            try {
-              Connection conn = DriverManager.getConnection(URL, USER, PW);
-              conn.setAutoCommit(false);
-
-              sql.setLength(0);
-              sql.append(
-                  "insert into T_SCM_TRADE (BARCODE, INDATE,PONO,POSUBNO,CNO,CNAME,PNO,PNAME,QTY,PRICE,AMOUNT,PRDATE,MKDATE,CARKIND,PLANT,QTY_ORDER,USEYN,mktime) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,to_char(sysdate,'YYYYMMDDHH24MISS'))");
-
-              ps5 = conn.prepareStatement(sql.toString());
-              index = 1;
-
-              ps5.setString(index++, result_barcode);
-              ps5.setString(index++, indate);
-              ps5.setString(index++, "1");
-              ps5.setString(index++, "2");
-              ps5.setString(index++, info.getCustcode()); // cno
-              ps5.setString(index++, info.getCustname()); //
-              ps5.setString(index++, info.getItemcode1()); //
-              ps5.setString(index++, info.getItemname()); //
-              ps5.setString(index++, info.getI_qty()); //
-              ps5.setInt(index++, 0); // priece
-              ps5.setInt(index++, 0); // amount
-              ps5.setString(index++, map.get("prdate"));
-              ps5.setString(index++, info.getMadate());
-              ps5.setString(index++, info.getCar_type());
-              ps5.setString(index++, map.get("branch"));
-              ps5.setString(index++, info.getTqty2());
-              ps5.setString(index++, "Y");
-
-              ps5.executeUpdate();
-
-              conn.commit();
-              ps5.close();
-              conn.close();
-            } catch (Exception e) {
-              // TODO: handle exception
-              e.printStackTrace();
-            } finally {
-
-            }
-
-          } else {
-
-            Class.forName(DRIVER2);
-            try {
-              Connection conn = DriverManager.getConnection(URL2, USER2, PW2);
-              conn.setAutoCommit(false);
-
-              sql.setLength(0);
-              sql.append(
-                  "insert into T_SCM_TRADE (BARCODE, INDATE,PONO,POSUBNO,CNO,CNAME,PNO,PNAME,QTY,PRICE,AMOUNT,PRDATE,MKDATE,CARKIND,PLANT,QTY_ORDER,USEYN,mktime) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,to_char(sysdate,'YYYYMMDDHH24MISS'))");
-
-              ps5 = conn.prepareStatement(sql.toString());
-              index = 1;
-
-              ps5.setString(index++, result_barcode);
-              ps5.setString(index++, indate);
-              ps5.setString(index++, "1");
-              ps5.setString(index++, "2");
-              ps5.setString(index++, info.getCustcode()); // cno
-              ps5.setString(index++, info.getCustname()); //
-              ps5.setString(index++, info.getItemcode1()); //
-              ps5.setString(index++, info.getItemname()); //
-              ps5.setString(index++, info.getI_qty()); //
-              ps5.setInt(index++, 0); // priece
-              ps5.setInt(index++, 0); // amount
-              ps5.setString(index++, map.get("prdate"));
-              ps5.setString(index++, info.getMadate());
-              ps5.setString(index++, info.getCar_type());
-              ps5.setString(index++, map.get("branch"));
-              ps5.setString(index++, info.getTqty2());
-              ps5.setString(index++, "Y");
-
-              ps5.executeUpdate();
-
-              conn.commit();
-              ps5.close();
-              conn.close();
-            } catch (Exception e) {
-              // TODO: handle exception
-              e.printStackTrace();
-            } finally {
-
-            }
-
-          }
-        //★★★★★삭제예정220726★★★★★ 울산 평택디비끝
+          // ★★★★★삭제예정220726★★★★★ 울산 평택디비
+          /*
+           * if (map.get("branch").equals("000")) {
+           * 
+           * Class.forName(DRIVER); try { Connection conn = DriverManager.getConnection(URL, USER,
+           * PW); conn.setAutoCommit(false);
+           * 
+           * sql.setLength(0); sql.append(
+           * "insert into T_SCM_TRADE (BARCODE, INDATE,PONO,POSUBNO,CNO,CNAME,PNO,PNAME,QTY,PRICE,AMOUNT,PRDATE,MKDATE,CARKIND,PLANT,QTY_ORDER,USEYN,mktime) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,to_char(sysdate,'YYYYMMDDHH24MISS'))"
+           * );
+           * 
+           * ps5 = conn.prepareStatement(sql.toString()); index = 1;
+           * 
+           * ps5.setString(index++, result_barcode); ps5.setString(index++, indate);
+           * ps5.setString(index++, "1"); ps5.setString(index++, "2"); ps5.setString(index++,
+           * info.getCustcode()); // cno ps5.setString(index++, info.getCustname()); //
+           * ps5.setString(index++, info.getItemcode1()); // ps5.setString(index++,
+           * info.getItemname()); // ps5.setString(index++, info.getI_qty()); // ps5.setInt(index++,
+           * 0); // priece ps5.setInt(index++, 0); // amount ps5.setString(index++,
+           * map.get("prdate")); ps5.setString(index++, info.getMadate()); ps5.setString(index++,
+           * info.getCar_type()); ps5.setString(index++, map.get("branch")); ps5.setString(index++,
+           * info.getTqty2()); ps5.setString(index++, "Y");
+           * 
+           * ps5.executeUpdate();
+           * 
+           * conn.commit(); ps5.close(); conn.close(); } catch (Exception e) { // TODO: handle
+           * exception e.printStackTrace(); } finally {
+           * 
+           * }
+           * 
+           * } else {
+           * 
+           * Class.forName(DRIVER2); try { Connection conn = DriverManager.getConnection(URL2,
+           * USER2, PW2); conn.setAutoCommit(false);
+           * 
+           * sql.setLength(0); sql.append(
+           * "insert into T_SCM_TRADE (BARCODE, INDATE,PONO,POSUBNO,CNO,CNAME,PNO,PNAME,QTY,PRICE,AMOUNT,PRDATE,MKDATE,CARKIND,PLANT,QTY_ORDER,USEYN,mktime) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,to_char(sysdate,'YYYYMMDDHH24MISS'))"
+           * );
+           * 
+           * ps5 = conn.prepareStatement(sql.toString()); index = 1;
+           * 
+           * ps5.setString(index++, result_barcode); ps5.setString(index++, indate);
+           * ps5.setString(index++, "1"); ps5.setString(index++, "2"); ps5.setString(index++,
+           * info.getCustcode()); // cno ps5.setString(index++, info.getCustname()); //
+           * ps5.setString(index++, info.getItemcode1()); // ps5.setString(index++,
+           * info.getItemname()); // ps5.setString(index++, info.getI_qty()); // ps5.setInt(index++,
+           * 0); // priece ps5.setInt(index++, 0); // amount ps5.setString(index++,
+           * map.get("prdate")); ps5.setString(index++, info.getMadate()); ps5.setString(index++,
+           * info.getCar_type()); ps5.setString(index++, map.get("branch")); ps5.setString(index++,
+           * info.getTqty2()); ps5.setString(index++, "Y");
+           * 
+           * ps5.executeUpdate();
+           * 
+           * conn.commit(); ps5.close(); conn.close(); } catch (Exception e) { // TODO: handle
+           * exception e.printStackTrace(); } finally {
+           * 
+           * }
+           * 
+           * }
+           */
+          // ★★★★★삭제예정220726★★★★★ 울산 평택디비끝
 
 
         }
@@ -11205,7 +11141,7 @@ public class WooboTechDao {
       int box_qty = Integer.parseInt(param.get("box_qty"));
       int box_qty2 = Integer.parseInt(param.get("box_qty2"));
       int box_qty3 = Integer.parseInt(param.get("box_qty3"));
-     
+
       String itemname = param.get("itemname");
       String itemcode1 = param.get("itemcode1");
       String custname = param.get("custname");
@@ -11213,18 +11149,18 @@ public class WooboTechDao {
       String car_type = param.get("car_type");
       String lotno = F.nullCheck(param.get("lotno"), " ");
       String indate = F.nullCheck(param.get("indate"));
-      indate = indate.replace("-","");
-      indate = indate.substring(2,8);
+      indate = indate.replace("-", "");
+      indate = indate.substring(2, 8);
       // String indate = param.get("indate");
       String madate = F.nullCheck(param.get("madate"), " ");
-      String madate2 =F.nullCheck(param.get("madate2"), " ");
-      String madate3 =F.nullCheck(param.get("madate3"), " ");
-      
-      
-      
+      String madate2 = F.nullCheck(param.get("madate2"), " ");
+      String madate3 = F.nullCheck(param.get("madate3"), " ");
+
+
+
       int production = Integer.parseInt(param.get("production"));
       int production2 = Integer.parseInt(param.get("production2"));
-      int production3  = Integer.parseInt(param.get("production3"));
+      int production3 = Integer.parseInt(param.get("production3"));
       String tradebarcode = param.get("tradebarcode");
       int lCnt1 = 0;
       int lCnt2 = 0;
@@ -11232,45 +11168,45 @@ public class WooboTechDao {
       int remainQty1 = 0;
       int remainQty2 = 0;
       int remainQty3 = 0;
-      if(box_qty!=0) {
-        lCnt1 = (int)(production/box_qty);
-        remainQty1 = production%box_qty;
+      if (box_qty != 0) {
+        lCnt1 = (int) (production / box_qty);
+        remainQty1 = production % box_qty;
       }
-      if(remainQty1>=1) {                   // 라벨 발행수1
+      if (remainQty1 >= 1) { // 라벨 발행수1
         lCnt1++;
       }
-      
-      if(box_qty2!=0) {
-       lCnt2 = (int)(production2/box_qty2);  // 라벨 발행수2
-        remainQty2 = production2%box_qty2;
-        if(remainQty2>=1) {
+
+      if (box_qty2 != 0) {
+        lCnt2 = (int) (production2 / box_qty2); // 라벨 발행수2
+        remainQty2 = production2 % box_qty2;
+        if (remainQty2 >= 1) {
           lCnt2++;
         }
       }
-      if(box_qty3!=0) {
-        lCnt3 = (int)(production3/box_qty3);  // 라벨 발행수3
-        remainQty3 = production3%box_qty3;
+      if (box_qty3 != 0) {
+        lCnt3 = (int) (production3 / box_qty3); // 라벨 발행수3
+        remainQty3 = production3 % box_qty3;
       }
-      if(remainQty3>=1) {
+      if (remainQty3 >= 1) {
         lCnt3++;
       }
-      int label_cnt = lCnt1+lCnt2+lCnt3; // 라벨 발행수
+      int label_cnt = lCnt1 + lCnt2 + lCnt3; // 라벨 발행수
 
       int remain_qty = totalqty % box_qty; // 남은 갯수
       int qty = totalqty / box_qty; // 박스에 들어가는 수량
-      
-      /*if (remain_qty >= 1) {
-        label_cnt++;
-      }*/
 
-      //String indate = DateUtil.getYYMMDD();
-      
+      /*
+       * if (remain_qty >= 1) { label_cnt++; }
+       */
+
+      // String indate = DateUtil.getYYMMDD();
+
       sql.setLength(0);
       sql.append("select nvl2(max(barcode),max(barcode)+1,'1') as barcode_seq  ");
       sql.append("  from T_SCM_BARCODE_MAX \n");
       sql.append(" where indate =?");
       ps = conx.prepareStatement(sql.toString());
-      
+
       sql.setLength(0);
       sql.append("insert into T_SCM_BARCODE_MAX (indate, kind,barcode) values(?,?,?)");
       ps2 = conx.prepareStatement(sql.toString());
@@ -11305,20 +11241,20 @@ public class WooboTechDao {
             ps2.setString(3, temp_barcode_seq);
             if (ps2.executeUpdate() > 0) {
               int index = 1;
-              
+
               ps4.setString(index++, sbBarcode.toString());
               ps4.setString(index++, "PUR");
               ps4.setString(index++, indate);
-              
-              if(cnt<=lCnt1) {
+
+              if (cnt <= lCnt1) {
                 ps4.setString(index++, madate);
-                ps4.setString(index++, "1");        //LOTNO
-              }else if(cnt<=lCnt2+lCnt1) {
+                ps4.setString(index++, "1"); // LOTNO
+              } else if (cnt <= lCnt2 + lCnt1) {
                 ps4.setString(index++, madate2);
-                ps4.setString(index++, "2");        //LOTNO
-              }else {
+                ps4.setString(index++, "2"); // LOTNO
+              } else {
                 ps4.setString(index++, madate3);
-                ps4.setString(index++, "3");        //LOTNO
+                ps4.setString(index++, "3"); // LOTNO
               }
               ps4.setString(index++, custcode); // cno
               ps4.setString(index++, custname); // cname
@@ -11328,119 +11264,114 @@ public class WooboTechDao {
               System.out.println("itemname=" + itemname);
               System.out.println("itemcode1=" + itemcode1);
 
-              //----------수정해야함---------------------------------
-              if(cnt<=lCnt1) {
-              if(remainQty1==0) {
-                ps4.setInt(index++, box_qty);
-              }else {
-                if(cnt<lCnt1) {
+              // ----------수정해야함---------------------------------
+              if (cnt <= lCnt1) {
+                if (remainQty1 == 0) {
                   ps4.setInt(index++, box_qty);
-                }else {
-                  ps4.setInt(index++, remainQty1);
-                }
-              }
-            }else if(cnt<=lCnt2+lCnt1) {
-              if(remainQty2==0) {
-                ps4.setInt(index++, box_qty2);
-              }else {
-                if(cnt<lCnt2+lCnt1) {
-                  ps4.setInt(index++, box_qty2);
-                }else {
-                  ps4.setInt(index++, remainQty2);
-                }
-              }
-            }else {
-              if(remainQty3==0) {
-                ps4.setInt(index++, box_qty3);
-              }else {
-                if(cnt<lCnt2+lCnt1+lCnt3) {
-                  ps4.setInt(index++, box_qty3);
-                }else {
-                  ps4.setInt(index++, remainQty3);
-                }
-              }
-            }
-              
-              
-            /*  if (label_cnt - 1 == i) {
-                if (remain_qty == 0) {
-                  ps4.setInt(index++, box_qty); // qty
                 } else {
-                  ps4.setInt(index++, remain_qty); //
+                  if (cnt < lCnt1) {
+                    ps4.setInt(index++, box_qty);
+                  } else {
+                    ps4.setInt(index++, remainQty1);
+                  }
+                }
+              } else if (cnt <= lCnt2 + lCnt1) {
+                if (remainQty2 == 0) {
+                  ps4.setInt(index++, box_qty2);
+                } else {
+                  if (cnt < lCnt2 + lCnt1) {
+                    ps4.setInt(index++, box_qty2);
+                  } else {
+                    ps4.setInt(index++, remainQty2);
+                  }
                 }
               } else {
-                ps4.setInt(index++, box_qty); //
-              }*/
-              //--------------------------------------------- 
-              
+                if (remainQty3 == 0) {
+                  ps4.setInt(index++, box_qty3);
+                } else {
+                  if (cnt < lCnt2 + lCnt1 + lCnt3) {
+                    ps4.setInt(index++, box_qty3);
+                  } else {
+                    ps4.setInt(index++, remainQty3);
+                  }
+                }
+              }
+
+
+              /*
+               * if (label_cnt - 1 == i) { if (remain_qty == 0) { ps4.setInt(index++, box_qty); //
+               * qty } else { ps4.setInt(index++, remain_qty); // } } else { ps4.setInt(index++,
+               * box_qty); // }
+               */
+              // ---------------------------------------------
+
               ps4.setString(index++, tradebarcode);
               ps4.setInt(index++, totalqty); //
-              if(cnt<=lCnt1) {
-                ps4.setInt(index++,production);
-              }else if(cnt<=lCnt2+lCnt1){
-                ps4.setInt(index++,production2);
-              }else {
-                ps4.setInt(index++,production3);
+              if (cnt <= lCnt1) {
+                ps4.setInt(index++, production);
+              } else if (cnt <= lCnt2 + lCnt1) {
+                ps4.setInt(index++, production2);
+              } else {
+                ps4.setInt(index++, production3);
               }
-              
+
 
               if (ps4.executeUpdate() <= 0) {
                 logger.info("▷▶▷▶▷▶ 바코드 저장 실패");
                 throw new Exception("▷▶▷▶▷▶ 바코드 저장  실패");
               }
               info.setBarcode(sbBarcode.toString());
-              //---------------------------------------수정해야함
-              if(cnt<=lCnt1) {System.out.println("1번째 박스 "+box_qty);
-              if(remainQty1==0) {
-                info.setQty(String.valueOf(box_qty));
-                info.setMadate(madate);
-              }else {
-                if(cnt<lCnt1) {
+              // ---------------------------------------수정해야함
+              if (cnt <= lCnt1) {
+                System.out.println("1번째 박스 " + box_qty);
+                if (remainQty1 == 0) {
                   info.setQty(String.valueOf(box_qty));
                   info.setMadate(madate);
-                }else {
-                  info.setQty(String.valueOf(remainQty1));
-                  info.setMadate(madate);
+                } else {
+                  if (cnt < lCnt1) {
+                    info.setQty(String.valueOf(box_qty));
+                    info.setMadate(madate);
+                  } else {
+                    info.setQty(String.valueOf(remainQty1));
+                    info.setMadate(madate);
+                  }
                 }
-              }
-            }else if(cnt<=lCnt2+lCnt1) {System.out.println("2번째 박스 "+box_qty2);
-              if(remainQty2==0) {
-                info.setQty(String.valueOf(box_qty2));
-                info.setMadate(madate2);
-              }else {
-                if(cnt<lCnt2+lCnt1) {
+              } else if (cnt <= lCnt2 + lCnt1) {
+                System.out.println("2번째 박스 " + box_qty2);
+                if (remainQty2 == 0) {
                   info.setQty(String.valueOf(box_qty2));
                   info.setMadate(madate2);
-                }else {
-                  info.setQty(String.valueOf(remainQty2));
-                  info.setMadate(madate2);
-                }
-              }
-            }else {
-              if(remainQty3==0) {
-                info.setQty(String.valueOf(box_qty3));
-                info.setMadate(madate3);
-              }else {
-                if(cnt<lCnt2+lCnt1+lCnt3) {
-                  info.setQty(String.valueOf(box_qty3));
-                  info.setMadate(madate3);
-                }else {
-                  info.setQty(String.valueOf(remainQty3));
-                  info.setMadate(madate3);
-                }
-              }
-            }
-              
-              /*if (label_cnt - 1 == i) {
-                if (remain_qty == 0) {
-                  info.setQty(String.valueOf(box_qty));
                 } else {
-                  info.setQty(String.valueOf(remain_qty));
+                  if (cnt < lCnt2 + lCnt1) {
+                    info.setQty(String.valueOf(box_qty2));
+                    info.setMadate(madate2);
+                  } else {
+                    info.setQty(String.valueOf(remainQty2));
+                    info.setMadate(madate2);
+                  }
                 }
               } else {
-                info.setQty(String.valueOf(box_qty));
-              }*/
-                //=-------------------------------------------------
+                if (remainQty3 == 0) {
+                  info.setQty(String.valueOf(box_qty3));
+                  info.setMadate(madate3);
+                } else {
+                  if (cnt < lCnt2 + lCnt1 + lCnt3) {
+                    info.setQty(String.valueOf(box_qty3));
+                    info.setMadate(madate3);
+                  } else {
+                    info.setQty(String.valueOf(remainQty3));
+                    info.setMadate(madate3);
+                  }
+                }
+              }
+
+              /*
+               * if (label_cnt - 1 == i) { if (remain_qty == 0) {
+               * info.setQty(String.valueOf(box_qty)); } else {
+               * info.setQty(String.valueOf(remain_qty)); } } else {
+               * info.setQty(String.valueOf(box_qty)); }
+               */
+              // =-------------------------------------------------
               arrList.add(info);
             } else {
 
@@ -11449,9 +11380,9 @@ public class WooboTechDao {
 
             }
           } else { // update
-            
-            logger.info("update 시작"+indate);
-            temp_barcode_seq = String.format("%05d", Integer.parseInt(temp_barcode_seq)); 
+
+            logger.info("update 시작" + indate);
+            temp_barcode_seq = String.format("%05d", Integer.parseInt(temp_barcode_seq));
             StringBuffer sbBarcode = new StringBuffer();
             sbBarcode.append("M");
             sbBarcode.append(indate);
@@ -11459,326 +11390,214 @@ public class WooboTechDao {
 
             ps3.setString(1, indate);
             if (ps3.executeUpdate() > 0) {
-              
+
               int index = 1;
 
               ps4.setString(index++, sbBarcode.toString());
               ps4.setString(index++, "PUR");
               ps4.setString(index++, indate);
-              if(cnt<=lCnt1) {
+              if (cnt <= lCnt1) {
                 ps4.setString(index++, madate);
-                ps4.setString(index++, "1");        //LOTNO
-              }else if(cnt<=lCnt2+lCnt1) {
+                ps4.setString(index++, "1"); // LOTNO
+              } else if (cnt <= lCnt2 + lCnt1) {
                 ps4.setString(index++, madate2);
-                ps4.setString(index++, "2");        //LOTNO
-              }else {
+                ps4.setString(index++, "2"); // LOTNO
+              } else {
                 ps4.setString(index++, madate3);
-                ps4.setString(index++, "3");        //LOTNO
+                ps4.setString(index++, "3"); // LOTNO
               }
               ps4.setString(index++, custcode); // cno
               ps4.setString(index++, custname); //
               ps4.setString(index++, itemcode1); //
               ps4.setString(index++, itemname); //
-              //-----------------------------수정
-              /*if (label_cnt - 1 == i) {
-                if (remain_qty == 0) {
-                  ps4.setInt(index++, box_qty); //
-                } else {
-                  ps4.setInt(index++, remain_qty); //
-                }
-              } else {
-                ps4.setInt(index++, box_qty); //
-              }*/
-              if(cnt<=lCnt1) {System.out.println("1번째 박스 220711"+box_qty);
-                if(remainQty1==0) {
+              // -----------------------------수정
+              /*
+               * if (label_cnt - 1 == i) { if (remain_qty == 0) { ps4.setInt(index++, box_qty); // }
+               * else { ps4.setInt(index++, remain_qty); // } } else { ps4.setInt(index++, box_qty);
+               * // }
+               */
+              if (cnt <= lCnt1) {
+                System.out.println("1번째 박스 220711" + box_qty);
+                if (remainQty1 == 0) {
                   ps4.setInt(index++, box_qty);
-                }else {
-                  if(cnt<lCnt1) {
+                } else {
+                  if (cnt < lCnt1) {
                     ps4.setInt(index++, box_qty);
-                  }else {
+                  } else {
                     ps4.setInt(index++, remainQty1);
                   }
                 }
-              }else if(cnt<=lCnt2+lCnt1) {System.out.println("2번째 박스 "+box_qty2);
-                if(remainQty2==0) {
+              } else if (cnt <= lCnt2 + lCnt1) {
+                System.out.println("2번째 박스 " + box_qty2);
+                if (remainQty2 == 0) {
                   ps4.setInt(index++, box_qty2);
-                }else {
-                  if(cnt<lCnt2+lCnt1) {
+                } else {
+                  if (cnt < lCnt2 + lCnt1) {
                     ps4.setInt(index++, box_qty2);
-                  }else {
+                  } else {
                     ps4.setInt(index++, remainQty2);
                   }
                 }
-              }else {
-                if(remainQty3==0) {
+              } else {
+                if (remainQty3 == 0) {
                   ps4.setInt(index++, box_qty3);
-                }else {
-                  if(cnt<lCnt2+lCnt1+lCnt3) {
+                } else {
+                  if (cnt < lCnt2 + lCnt1 + lCnt3) {
                     ps4.setInt(index++, box_qty3);
-                  }else {
+                  } else {
                     ps4.setInt(index++, remainQty3);
                   }
                 }
               }
-             
-              //----------------------------------------------------
+
+              // ----------------------------------------------------
               ps4.setString(index++, tradebarcode);
               ps4.setInt(index++, totalqty); //
-             // ps4.setString(index++,  "to_char(sysdate,'YYYYMMDDHH24MISS')");
-              if(cnt<=lCnt1) {
-                ps4.setInt(index++,production);
-              }else if(cnt<=lCnt1+lCnt2){
-                ps4.setInt(index++,production2);
-              }else {
-                ps4.setInt(index++,production3);
+              // ps4.setString(index++, "to_char(sysdate,'YYYYMMDDHH24MISS')");
+              if (cnt <= lCnt1) {
+                ps4.setInt(index++, production);
+              } else if (cnt <= lCnt1 + lCnt2) {
+                ps4.setInt(index++, production2);
+              } else {
+                ps4.setInt(index++, production3);
               }
               if (ps4.executeUpdate() <= 0) {
                 logger.info("▷▶▷▶▷▶ 바코드 저장 실패");
                 throw new Exception("▷▶▷▶▷▶ 바코드 저장  실패");
               }
-              
-            //★★★★★삭제예정220726★★★★★ 울산 평택디비
-              if (param.get("branch").equals("000")) {
-                Class.forName(DRIVER);
 
-                try {
-                  Connection conn = DriverManager.getConnection(URL, USER, PW);
-                  conn.setAutoCommit(false);
+              // ★★★★★삭제예정220726★★★★★ 울산 평택디비
+              /*
+               * if (param.get("branch").equals("000")) { Class.forName(DRIVER);
+               * 
+               * try { Connection conn = DriverManager.getConnection(URL, USER, PW);
+               * conn.setAutoCommit(false);
+               * 
+               * sql.setLength(0); sql.append(
+               * "insert into T_SCM_BARCODE (BARCODE, kind,INDATE,MKDATE,LOTNO,CNO,CNAME,PNO,PNAME,QTY,TRADEBARCODE,totalqty,mktime,LOTQTY) values(?,?,?,?,?,?,?,?,?,?,?,?,to_char(sysdate,'YYYYMMDDHH24MISS'),?)"
+               * );
+               * 
+               * ps5 = conn.prepareStatement(sql.toString()); index = 1;
+               * 
+               * ps5.setString(index++, sbBarcode.toString()); ps5.setString(index++, "PUR");
+               * ps5.setString(index++, indate); if(cnt<=lCnt1) { ps5.setString(index++, madate);
+               * ps5.setString(index++, "1"); //LOTNO }else if(cnt<=lCnt2+lCnt1) {
+               * ps5.setString(index++, madate2); ps5.setString(index++, "2"); //LOTNO }else {
+               * ps5.setString(index++, madate3); ps5.setString(index++, "3"); //LOTNO }
+               * ps5.setString(index++, custcode); // cno ps5.setString(index++, custname); //
+               * ps5.setString(index++, itemcode1); // ps5.setString(index++, itemname); //
+               * 
+               * if (label_cnt - 1 == i) { if (remain_qty == 0) { ps5.setInt(index++, box_qty); // }
+               * else { ps5.setInt(index++, remain_qty); // } } else { ps5.setInt(index++, box_qty);
+               * // } if(cnt<=lCnt1) {System.out.println("1번째 박스2022 "+box_qty); if(remainQty1==0) {
+               * ps5.setInt(index++, box_qty); }else { if(cnt<lCnt1) { ps5.setInt(index++, box_qty);
+               * }else { ps5.setInt(index++, remainQty1); } } }else if(cnt<=lCnt2+lCnt1)
+               * {System.out.println("2번째 박스 "+box_qty2); if(remainQty2==0) { ps5.setInt(index++,
+               * box_qty2); }else { if(cnt<lCnt2+lCnt1) { ps5.setInt(index++, box_qty2); }else {
+               * ps5.setInt(index++, remainQty2); } } }else { if(remainQty3==0) {
+               * ps5.setInt(index++, box_qty3); }else { if(cnt<lCnt2+lCnt1+lCnt3) {
+               * ps5.setInt(index++, box_qty3); }else { ps5.setInt(index++, remainQty3); } } }
+               * ps5.setString(index++, tradebarcode); ps5.setInt(index++, totalqty); //
+               * 
+               * if(cnt<=lCnt1) { ps5.setInt(index++,production); }else if(cnt<=lCnt2+lCnt1){
+               * ps5.setInt(index++,production2); }else { ps5.setInt(index++,production3); }
+               * System.out.println("20220711 5 "+production); ps5.executeUpdate();
+               * System.out.println("20220711 6 "); conn.commit(); ps5.close(); conn.close(); }
+               * catch (Exception e) { // TODO: handle exception e.printStackTrace(); }
+               * 
+               * } else {
+               * 
+               * Class.forName(DRIVER2);
+               * 
+               * try { Connection conn = DriverManager.getConnection(URL2, USER2, PW2);
+               * conn.setAutoCommit(false);
+               * 
+               * sql.setLength(0); sql.append(
+               * "insert into T_SCM_BARCODE (BARCODE, kind,INDATE,MKDATE,LOTNO,CNO,CNAME,PNO,PNAME,QTY,TRADEBARCODE,totalqty,mktime,LOTQTY) values(?,?,?,?,?,?,?,?,?,?,?,?,to_char(sysdate,'YYYYMMDDHH24MISS'),?)"
+               * );
+               * 
+               * ps5 = conn.prepareStatement(sql.toString()); index = 1;
+               * 
+               * ps5.setString(index++, sbBarcode.toString()); ps5.setString(index++, "PUR");
+               * ps5.setString(index++, indate); if(cnt<=lCnt1) { ps5.setString(index++, madate);
+               * ps5.setString(index++, "1"); //LOTNO }else if(cnt<=lCnt2+lCnt1) {
+               * ps5.setString(index++, madate2); ps5.setString(index++, "2"); //LOTNO }else {
+               * ps5.setString(index++, madate3); ps5.setString(index++, "3"); //LOTNO }
+               * ps5.setString(index++, custcode); // cno ps5.setString(index++, custname); //
+               * ps5.setString(index++, itemcode1); // ps5.setString(index++, itemname); //
+               * 
+               * if (label_cnt - 1 == i) { if (remain_qty == 0) { ps5.setInt(index++, box_qty); // }
+               * else { ps5.setInt(index++, remain_qty); // } } else { ps5.setInt(index++, box_qty);
+               * // } if(cnt<=lCnt1) { if(remainQty1==0) { ps5.setInt(index++, box_qty); }else {
+               * if(cnt<lCnt1) { ps5.setInt(index++, box_qty); }else { ps5.setInt(index++,
+               * remainQty1); } } }else if(cnt<=lCnt2+lCnt1) { if(remainQty2==0) {
+               * ps5.setInt(index++, box_qty2); }else { if(cnt<lCnt2+lCnt1) { ps5.setInt(index++,
+               * box_qty2); }else { ps5.setInt(index++, remainQty2); } } }else { if(remainQty3==0) {
+               * ps5.setInt(index++, box_qty3); }else { if(cnt<lCnt2+lCnt1+lCnt3) {
+               * ps5.setInt(index++, box_qty3); }else { ps5.setInt(index++, remainQty3); } } }
+               * 
+               * ps5.setString(index++, tradebarcode); ps5.setInt(index++, totalqty); //
+               * if(cnt<=lCnt1) { ps5.setInt(index++,production); }else if(cnt<=lCnt2+lCnt1){
+               * ps5.setInt(index++,production2); }else { ps5.setInt(index++,production3); }
+               * ps5.executeUpdate();
+               * 
+               * conn.commit(); ps5.close(); conn.close(); } catch (Exception e) { // TODO: handle
+               * exception e.printStackTrace(); }
+               * 
+               * }
+               */
+              // ★★★★★삭제예정220726★★★★★ 울산 평택디비 끝
 
-                  sql.setLength(0);
-                  sql.append(
-                      "insert into T_SCM_BARCODE (BARCODE, kind,INDATE,MKDATE,LOTNO,CNO,CNAME,PNO,PNAME,QTY,TRADEBARCODE,totalqty,mktime,LOTQTY) values(?,?,?,?,?,?,?,?,?,?,?,?,to_char(sysdate,'YYYYMMDDHH24MISS'),?)");
-
-                  ps5 = conn.prepareStatement(sql.toString());
-                  index = 1;
-
-                  ps5.setString(index++, sbBarcode.toString());
-                  ps5.setString(index++, "PUR");
-                  ps5.setString(index++, indate);
-                  if(cnt<=lCnt1) {
-                    ps5.setString(index++, madate);
-                    ps5.setString(index++, "1");        //LOTNO
-                  }else if(cnt<=lCnt2+lCnt1) {
-                    ps5.setString(index++, madate2);
-                    ps5.setString(index++, "2");        //LOTNO
-                  }else {
-                    ps5.setString(index++, madate3);
-                    ps5.setString(index++, "3");        //LOTNO
-                  }
-                  ps5.setString(index++, custcode); // cno
-                  ps5.setString(index++, custname); //
-                  ps5.setString(index++, itemcode1); //
-                  ps5.setString(index++, itemname); //
-
-                  /*if (label_cnt - 1 == i) {
-                    if (remain_qty == 0) {
-                      ps5.setInt(index++, box_qty); //
-                    } else {
-                      ps5.setInt(index++, remain_qty); //
-                    }
-                  } else {
-                    ps5.setInt(index++, box_qty); //
-                  }*/
-                  if(cnt<=lCnt1) {System.out.println("1번째 박스2022 "+box_qty);
-                  if(remainQty1==0) {
-                    ps5.setInt(index++, box_qty);
-                  }else {
-                    if(cnt<lCnt1) {
-                      ps5.setInt(index++, box_qty);
-                    }else {
-                      ps5.setInt(index++, remainQty1);
-                    }
-                  }
-                }else if(cnt<=lCnt2+lCnt1) {System.out.println("2번째 박스 "+box_qty2);
-                  if(remainQty2==0) {
-                    ps5.setInt(index++, box_qty2);
-                  }else {
-                    if(cnt<lCnt2+lCnt1) {
-                      ps5.setInt(index++, box_qty2);
-                    }else {
-                      ps5.setInt(index++, remainQty2);
-                    }
-                  }
-                }else {
-                  if(remainQty3==0) {
-                    ps5.setInt(index++, box_qty3);
-                  }else {
-                    if(cnt<lCnt2+lCnt1+lCnt3) {
-                      ps5.setInt(index++, box_qty3);
-                    }else {
-                      ps5.setInt(index++, remainQty3);
-                    }
-                  }
-                }   
-                  ps5.setString(index++, tradebarcode); 
-                  ps5.setInt(index++, totalqty); //
-                 
-                  if(cnt<=lCnt1) {
-                    ps5.setInt(index++,production);
-                  }else if(cnt<=lCnt2+lCnt1){
-                    ps5.setInt(index++,production2);
-                  }else {
-                    ps5.setInt(index++,production3);
-                  } System.out.println("20220711 5 "+production);
-                  ps5.executeUpdate();
-                  System.out.println("20220711 6 ");
-                  conn.commit();
-                  ps5.close();
-                  conn.close();
-                } catch (Exception e) {
-                  // TODO: handle exception
-                  e.printStackTrace();
-                }
-
-              } else {
-
-                Class.forName(DRIVER2);
-
-                try {
-                  Connection conn = DriverManager.getConnection(URL2, USER2, PW2);
-                  conn.setAutoCommit(false);
-
-                  sql.setLength(0);
-                  sql.append(
-                      "insert into T_SCM_BARCODE (BARCODE, kind,INDATE,MKDATE,LOTNO,CNO,CNAME,PNO,PNAME,QTY,TRADEBARCODE,totalqty,mktime,LOTQTY) values(?,?,?,?,?,?,?,?,?,?,?,?,to_char(sysdate,'YYYYMMDDHH24MISS'),?)");
-
-                  ps5 = conn.prepareStatement(sql.toString());
-                  index = 1;
-
-                  ps5.setString(index++, sbBarcode.toString());
-                  ps5.setString(index++, "PUR");
-                  ps5.setString(index++, indate);
-                  if(cnt<=lCnt1) {
-                    ps5.setString(index++, madate);
-                    ps5.setString(index++, "1");        //LOTNO
-                  }else if(cnt<=lCnt2+lCnt1) {
-                    ps5.setString(index++, madate2);
-                    ps5.setString(index++, "2");        //LOTNO
-                  }else {
-                    ps5.setString(index++, madate3);
-                    ps5.setString(index++, "3");        //LOTNO
-                  }
-                  ps5.setString(index++, custcode); // cno
-                  ps5.setString(index++, custname); //
-                  ps5.setString(index++, itemcode1); //
-                  ps5.setString(index++, itemname); //
-
-                  /*if (label_cnt - 1 == i) {
-                    if (remain_qty == 0) {
-                      ps5.setInt(index++, box_qty); //
-                    } else {
-                      ps5.setInt(index++, remain_qty); //
-                    }
-                  } else {
-                    ps5.setInt(index++, box_qty); //
-                  }*/
-                  if(cnt<=lCnt1) {
-                  if(remainQty1==0) {
-                    ps5.setInt(index++, box_qty);
-                  }else {
-                    if(cnt<lCnt1) {
-                      ps5.setInt(index++, box_qty);
-                    }else {
-                      ps5.setInt(index++, remainQty1);
-                    }
-                  }
-                }else if(cnt<=lCnt2+lCnt1) {
-                  if(remainQty2==0) {
-                    ps5.setInt(index++, box_qty2);
-                  }else {
-                    if(cnt<lCnt2+lCnt1) {
-                      ps5.setInt(index++, box_qty2);
-                    }else {
-                      ps5.setInt(index++, remainQty2);
-                    }
-                  }
-                }else {
-                  if(remainQty3==0) {
-                    ps5.setInt(index++, box_qty3);
-                  }else {
-                    if(cnt<lCnt2+lCnt1+lCnt3) {
-                      ps5.setInt(index++, box_qty3);
-                    }else {
-                      ps5.setInt(index++, remainQty3);
-                    }
-                  }
-                }
-
-                  ps5.setString(index++, tradebarcode);
-                  ps5.setInt(index++, totalqty); //
-                  if(cnt<=lCnt1) {
-                    ps5.setInt(index++,production);
-                  }else if(cnt<=lCnt2+lCnt1){
-                    ps5.setInt(index++,production2);
-                  }else {
-                    ps5.setInt(index++,production3);
-                  }
-                  ps5.executeUpdate();
-
-                  conn.commit();
-                  ps5.close();
-                  conn.close();
-                } catch (Exception e) {
-                  // TODO: handle exception
-                  e.printStackTrace();
-                }
-
-              }
-            //★★★★★삭제예정220726★★★★★ 울산 평택디비 끝
-   
               info.setBarcode(sbBarcode.toString());
-              if(cnt<=lCnt1) {
-              if(remainQty1==0) {
-                info.setQty(String.valueOf(box_qty));
-                info.setMadate(madate);
-              }else {
-                if(cnt<lCnt1) {
+              if (cnt <= lCnt1) {
+                if (remainQty1 == 0) {
                   info.setQty(String.valueOf(box_qty));
                   info.setMadate(madate);
-                }else {
-                  info.setQty(String.valueOf(remainQty1));
-                  info.setMadate(madate);
+                } else {
+                  if (cnt < lCnt1) {
+                    info.setQty(String.valueOf(box_qty));
+                    info.setMadate(madate);
+                  } else {
+                    info.setQty(String.valueOf(remainQty1));
+                    info.setMadate(madate);
+                  }
                 }
-              }
-            }else if(cnt<=lCnt2+lCnt1) {
-              if(remainQty2==0) {
-                info.setQty(String.valueOf(box_qty2));
-                info.setMadate(madate2);
-              }else {
-                if(cnt<lCnt2+lCnt1) {
+              } else if (cnt <= lCnt2 + lCnt1) {
+                if (remainQty2 == 0) {
                   info.setQty(String.valueOf(box_qty2));
                   info.setMadate(madate2);
-                }else {
-                  info.setQty(String.valueOf(remainQty2));
-                  info.setMadate(madate2);
+                } else {
+                  if (cnt < lCnt2 + lCnt1) {
+                    info.setQty(String.valueOf(box_qty2));
+                    info.setMadate(madate2);
+                  } else {
+                    info.setQty(String.valueOf(remainQty2));
+                    info.setMadate(madate2);
+                  }
                 }
-              }
-            }else {
-              if(remainQty3==0) {
-                info.setQty(String.valueOf(box_qty3));
-                info.setMadate(madate3);
-              }else {
-                if(cnt<lCnt2+lCnt1+lCnt3) {
+              } else {
+                if (remainQty3 == 0) {
                   info.setQty(String.valueOf(box_qty3));
                   info.setMadate(madate3);
-                }else {
-                  info.setQty(String.valueOf(remainQty3));
-                  info.setMadate(madate3);
+                } else {
+                  if (cnt < lCnt2 + lCnt1 + lCnt3) {
+                    info.setQty(String.valueOf(box_qty3));
+                    info.setMadate(madate3);
+                  } else {
+                    info.setQty(String.valueOf(remainQty3));
+                    info.setMadate(madate3);
+                  }
                 }
               }
-            }
-       
-              /*if (label_cnt - 1 == i) {
 
-                if (remain_qty == 0) {
-                  info.setQty(String.valueOf(box_qty));
-                } else {
-                  info.setQty(String.valueOf(remain_qty));
-                }
-
-              } else {
-                info.setQty(String.valueOf(box_qty));
-              }*/
+              /*
+               * if (label_cnt - 1 == i) {
+               * 
+               * if (remain_qty == 0) { info.setQty(String.valueOf(box_qty)); } else {
+               * info.setQty(String.valueOf(remain_qty)); }
+               * 
+               * } else { info.setQty(String.valueOf(box_qty)); }
+               */
 
               arrList.add(info);
               // arrList.add(sbBarcode.toString());
@@ -11816,6 +11635,41 @@ public class WooboTechDao {
     System.out.println(sql.toString());
     return arrList;
 
+  }
+
+  public void tradeintf_u(Map<String, String> param) {
+    int result = 0;
+
+    PreparedStatement ps = null;
+    Connection conx = null;
+    StringBuffer sql = new StringBuffer();
+    ResultSet rs = null;
+    String tradebarcode = param.get("tradebarcode");
+    System.out.println("tradebarcode확인 : " + tradebarcode);
+    try {
+      conx = dataSource.getConnection();
+      conx.setAutoCommit(false);
+
+      sql.setLength(0);
+      sql.append("   UPDATE t_scm_trade  \n");
+      sql.append("set intf_yn ='N', intf_ymdhms=' '                \n");
+      sql.append("where barcode='");
+      sql.append(tradebarcode);
+      sql.append("'");
+
+      ps = conx.prepareStatement(sql.toString());
+      ps.executeUpdate();
+
+      conx.commit();
+      conx.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+      // conx.rollback();
+    } finally {
+      jFunction.close(rs, ps, conx);
+    }
+    System.out.println("221114확인3" + sql.toString());
+    return;
   }
 
   public int mng_member_dt_u(Map<String, String> map) {
@@ -13076,7 +12930,12 @@ public class WooboTechDao {
     sql.append(
         "        PIVOT            (                                                                                                                                                            \n");
     sql.append(
-        "        SUM(plan_qty) , sum(changed) as newchanged        FOR CONDATE IN  (                               \n");        //220628 , sum(changed) as newchanged 추가했음
+        "        SUM(plan_qty) , sum(changed) as newchanged        FOR CONDATE IN  (                               \n"); // 220628
+                                                                                                                         // ,
+                                                                                                                         // sum(changed)
+                                                                                                                         // as
+                                                                                                                         // newchanged
+                                                                                                                         // 추가했음
     sql.append("'");
     sql.append(arrDay[0]);
     sql.append("'");
@@ -13681,7 +13540,7 @@ public class WooboTechDao {
     String alldate = param.get("result");
     String align = F.nullCheck(param.get("align"), "");
     String income = F.nullCheck(param.get("income"), "");
-    String item2 = F.nullCheck(param.get("item2"),"");
+    String item2 = F.nullCheck(param.get("item2"), "");
     sql.append("SELECT	t.*																	\n");
     sql.append("FROM	(																	\n");
     sql.append("		 SELECT	x.*, rownum as row_seq 										\n");
@@ -13812,8 +13671,8 @@ public class WooboTechDao {
     sql.append("'																			\n");
     sql.append("                     AND    useyn = 'Y'),0) as income14						\n");
 
-   
-    
+
+
     sql.append("		 FROM	(															\n");
     sql.append("		 	    SELECT														\n");
     sql.append("						A.*													\n");
@@ -13831,7 +13690,8 @@ public class WooboTechDao {
     sql.append("						   ,a.itemcode										\n");
     sql.append("						   ,A.condate										\n");
     sql.append("						   ,sum(gQTY) mrp_qty								\n");
-    sql.append("                           ,case when up_date>= TO_CHAR(SYSDATE-48/24, 'YYYYMMDDHH24MI') then 1 else 0 end as changed");
+    sql.append(
+        "                           ,case when up_date>= TO_CHAR(SYSDATE-48/24, 'YYYYMMDDHH24MI') then 1 else 0 end as changed");
     sql.append("				     FROM   T_PP_MRP_REQUIREMENT2 a							\n");
     sql.append("					 LEFT OUTER JOIN T_MI_ITEM c							\n");
     sql.append("					 ON	    a.gubun = c.gubun								\n");
@@ -13849,9 +13709,10 @@ public class WooboTechDao {
     sql.append("        AND     A.CONDATE   <='");
     sql.append(arrDay[13]);
     sql.append("'");
-   
-    
-    sql.append("					GROUP BY 	A.gubun, A.branch, A.itemcode, A.condate	    , case when up_date>= TO_CHAR(SYSDATE-48/24, 'YYYYMMDDHH24MI') then 1 else 0 end\n");
+
+
+    sql.append(
+        "					GROUP BY 	A.gubun, A.branch, A.itemcode, A.condate	    , case when up_date>= TO_CHAR(SYSDATE-48/24, 'YYYYMMDDHH24MI') then 1 else 0 end\n");
 
     if (alldate != null) {
       if (alldate.equals("0")) {
@@ -14005,7 +13866,7 @@ public class WooboTechDao {
     sql.append("		ON					c.gubun=cc.cu_gubun								\n");
     sql.append("		AND					c.custcode=cc.cu_code							\n");
     sql.append("		WHERE				a.gubun='01' 					\n");
- //   sql.append("        WHERE             a.gubun = '01' and i.cmb_product = '001'                          \n");
+    // sql.append(" WHERE a.gubun = '01' and i.cmb_product = '001' \n");
 
     if (!session_cu_code.equals("master")) {
       sql.append("and c.custcode ='");
@@ -14041,12 +13902,12 @@ public class WooboTechDao {
 
     if (!"0".equals(item2)) {// 생산구분
       sql.append(" AND Q.SUBNAME LIKE '%");
-     // sql.append("UPPER('");
+      // sql.append("UPPER('");
       sql.append(item2);
-     // sql.append("')");
+      // sql.append("')");
       sql.append("%'");
     }
-    
+
     if (!"".equals(itemname)) {
       sql.append(" AND UPPER(itemname) LIKE '%'||");
       sql.append("UPPER('");
@@ -15307,7 +15168,7 @@ public class WooboTechDao {
 
   }
 
-  // 생산계획 수량 확인     ////★★★★★삭제예정220726★★★★★ 
+  // 생산계획 수량 확인 ////★★★★★삭제예정220726★★★★★
   public int mng_buy_income(Map<String, String> param) {
 
     // String cno = F.nullCheck(param.get("cno"), "");
@@ -16021,8 +15882,8 @@ public class WooboTechDao {
         "	 FROM(																												\n");
     sql.append(
         "		  SELECT	DISTINCT	dtime																					\n");
-    /*★★★★★삭제예정220725★★★★★
-     * sql.
+    /*
+     * ★★★★★삭제예정220725★★★★★ sql.
      * append("					   ,regexp_substr(listagg(dtime,',') within group (order by dstate desc),'[^,]+',1,1) as dtime 		\n"
      * ); sql.
      * append("					   ,regexp_substr(listagg(dtime2,',') within group (order by dstate desc),'[^,]+',1,1) as dtime2 	\n"
@@ -16136,47 +15997,35 @@ public class WooboTechDao {
       conn.setAutoCommit(false);
       sql2.append("UPDATE T_SCM_BARCODE SET USEYN = 'N' WHERE tradebarcode='");
       sql2.append(barcode);
-      sql2.append("'");   
-      sql.append("UPDATE T_SCM_TRADE SET USEYN = 'N', intf_yn='N', intf_ymdhms=' ' WHERE barcode='");
+      sql2.append("'");
+      sql.append(
+          "UPDATE T_SCM_TRADE SET USEYN = 'N', intf_yn='N', intf_ymdhms=' ' WHERE barcode='");
       sql.append(barcode);
       sql.append("'");
-     
+
 
       pstmt = conn.prepareStatement(sql.toString());
       pstmt3 = conn.prepareStatement(sql2.toString());
       pstmt.executeUpdate();
       pstmt3.executeUpdate();
       conn.commit();
-    //★★★★★삭제예정220721★★★★★ 울산평택디비 시작
-      Class.forName(DRIVER);
-      try {
-        Connection conn2 = DriverManager.getConnection(URL, USER, PW);
-        conn2.setAutoCommit(false);
-        pstmt2 = conn2.prepareStatement(sql.toString());
-        pstmt2.executeUpdate();
-        pstmt2.close();
-        conn2.commit();
-        conn2.close();
-
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-
-      Class.forName(DRIVER2);
-
-      try {
-        Connection conn2 = DriverManager.getConnection(URL2, USER2, PW2);
-        conn2.setAutoCommit(false);
-        pstmt2 = conn2.prepareStatement(sql.toString());
-        pstmt2.executeUpdate();
-        pstmt2.close();
-        conn2.commit();
-        conn2.close();
-
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-      //★★★★★삭제예정220721★★★★★끝
+      // ★★★★★삭제예정220721★★★★★ 울산평택디비 시작
+      /*
+       * Class.forName(DRIVER); try { Connection conn2 = DriverManager.getConnection(URL, USER, PW);
+       * conn2.setAutoCommit(false); pstmt2 = conn2.prepareStatement(sql.toString());
+       * pstmt2.executeUpdate(); pstmt2.close(); conn2.commit(); conn2.close();
+       * 
+       * } catch (Exception e) { e.printStackTrace(); }
+       * 
+       * Class.forName(DRIVER2);
+       * 
+       * try { Connection conn2 = DriverManager.getConnection(URL2, USER2, PW2);
+       * conn2.setAutoCommit(false); pstmt2 = conn2.prepareStatement(sql.toString());
+       * pstmt2.executeUpdate(); pstmt2.close(); conn2.commit(); conn2.close();
+       * 
+       * } catch (Exception e) { e.printStackTrace(); }
+       */
+      // ★★★★★삭제예정220721★★★★★끝
     } catch (Exception e) {
       e.printStackTrace();
       conn.rollback();
@@ -16204,7 +16053,7 @@ public class WooboTechDao {
       conn.setAutoCommit(false);
       sql2.append("UPDATE T_SCM_BARCODE SET USEYN = 'N' WHERE tradebarcode='");
       sql2.append(i);
-      sql2.append("'");   
+      sql2.append("'");
       sql.append("UPDATE T_SCM_TRADE SET USEYN = 'N' WHERE barcode ='");
       sql.append(i);
       sql.append("'");
@@ -16214,35 +16063,21 @@ public class WooboTechDao {
       pstmt.executeUpdate();
       pstmt3.executeUpdate();
       conn.commit();
-//★★★★★삭제예정220721★★★★★ 울산평택디비 시작
-      Class.forName(DRIVER);
-      try {
-        conn2 = DriverManager.getConnection(URL, USER, PW);
-        conn2.setAutoCommit(false);
-        pstmt2 = conn2.prepareStatement(sql.toString());
-        pstmt2.executeUpdate();
-        pstmt2.close();
-        conn2.commit();
-        conn2.close();
-
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-
-      Class.forName(DRIVER2);
-      try {
-        conn2 = DriverManager.getConnection(URL2, USER2, PW2);
-        conn2.setAutoCommit(false);
-        pstmt2 = conn2.prepareStatement(sql.toString());
-        pstmt2.executeUpdate();
-        pstmt2.close();
-        conn2.commit();
-        conn2.close();
-
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    //★★★★★삭제예정220721★★★★★ 울산평택디비 끝
+      // ★★★★★삭제예정220721★★★★★ 울산평택디비 시작
+      /*
+       * Class.forName(DRIVER); try { conn2 = DriverManager.getConnection(URL, USER, PW);
+       * conn2.setAutoCommit(false); pstmt2 = conn2.prepareStatement(sql.toString());
+       * pstmt2.executeUpdate(); pstmt2.close(); conn2.commit(); conn2.close();
+       * 
+       * } catch (Exception e) { e.printStackTrace(); }
+       * 
+       * Class.forName(DRIVER2); try { conn2 = DriverManager.getConnection(URL2, USER2, PW2);
+       * conn2.setAutoCommit(false); pstmt2 = conn2.prepareStatement(sql.toString());
+       * pstmt2.executeUpdate(); pstmt2.close(); conn2.commit(); conn2.close();
+       * 
+       * } catch (Exception e) { e.printStackTrace(); }
+       */
+      // ★★★★★삭제예정220721★★★★★ 울산평택디비 끝
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -16275,34 +16110,20 @@ public class WooboTechDao {
 
       pstmt.executeUpdate();
       conn.commit();
-////★★★★★삭제예정220721★★★★★ 울산평택디비 시작
-      Class.forName(DRIVER);
-      try {
-        Connection conn2 = DriverManager.getConnection(URL, USER, PW);
-        conn2.setAutoCommit(false);
-        pstmt2 = conn2.prepareStatement(sql.toString());
-        pstmt2.executeUpdate();
-        pstmt2.close();
-        conn2.commit();
-        conn2.close();
-
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-
-      Class.forName(DRIVER2);
-      try {
-        Connection conn2 = DriverManager.getConnection(URL2, USER2, PW2);
-        conn2.setAutoCommit(false);
-        pstmt2 = conn2.prepareStatement(sql.toString());
-        pstmt2.executeUpdate();
-        pstmt2.close();
-        conn2.commit();
-        conn2.close();
-
-      } catch (Exception e) {
-        e.printStackTrace();
-      }//★★★★★삭제예정220721★★★★★ 울산평택디비 끝
+      //// ★★★★★삭제예정220721★★★★★ 울산평택디비 시작
+      /*
+       * Class.forName(DRIVER); try { Connection conn2 = DriverManager.getConnection(URL, USER, PW);
+       * conn2.setAutoCommit(false); pstmt2 = conn2.prepareStatement(sql.toString());
+       * pstmt2.executeUpdate(); pstmt2.close(); conn2.commit(); conn2.close();
+       * 
+       * } catch (Exception e) { e.printStackTrace(); }
+       * 
+       * Class.forName(DRIVER2); try { Connection conn2 = DriverManager.getConnection(URL2, USER2,
+       * PW2); conn2.setAutoCommit(false); pstmt2 = conn2.prepareStatement(sql.toString());
+       * pstmt2.executeUpdate(); pstmt2.close(); conn2.commit(); conn2.close();
+       * 
+       * } catch (Exception e) { e.printStackTrace(); }
+       */ // ★★★★★삭제예정220721★★★★★ 울산평택디비 끝
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -16335,37 +16156,25 @@ public class WooboTechDao {
 
       pstmt.executeUpdate();
       conn.commit();
-    //★★★★★삭제예정220721★★★★★ 울산평택디비 시작
-      Class.forName(DRIVER);
-
-      try {
-        Connection conn2 = DriverManager.getConnection(URL, USER, PW);
-        conn2.setAutoCommit(false);
-        pstmt2 = conn2.prepareStatement(sql.toString());
-        pstmt2.executeUpdate();
-        pstmt2.close();
-        conn2.commit();
-        conn2.close();
-
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-
-      Class.forName(DRIVER2);
-
-      try {
-        Connection conn2 = DriverManager.getConnection(URL2, USER2, PW2);
-        conn2.setAutoCommit(false);
-        pstmt2 = conn2.prepareStatement(sql.toString());
-        pstmt2.executeUpdate();
-        pstmt2.close();
-        conn2.commit();
-        conn2.close();
-
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    //★★★★★삭제예정220721★★★★★ 울산평택디비 끝
+      // ★★★★★삭제예정220721★★★★★ 울산평택디비 시작
+      /*
+       * Class.forName(DRIVER);
+       * 
+       * try { Connection conn2 = DriverManager.getConnection(URL, USER, PW);
+       * conn2.setAutoCommit(false); pstmt2 = conn2.prepareStatement(sql.toString());
+       * pstmt2.executeUpdate(); pstmt2.close(); conn2.commit(); conn2.close();
+       * 
+       * } catch (Exception e) { e.printStackTrace(); }
+       * 
+       * Class.forName(DRIVER2);
+       * 
+       * try { Connection conn2 = DriverManager.getConnection(URL2, USER2, PW2);
+       * conn2.setAutoCommit(false); pstmt2 = conn2.prepareStatement(sql.toString());
+       * pstmt2.executeUpdate(); pstmt2.close(); conn2.commit(); conn2.close();
+       * 
+       * } catch (Exception e) { e.printStackTrace(); }
+       */
+      // ★★★★★삭제예정220721★★★★★ 울산평택디비 끝
     } catch (Exception e) {
       e.printStackTrace();
       conn.rollback();
@@ -16388,7 +16197,8 @@ public class WooboTechDao {
       conn = dataSource.getConnection();
       conn.setAutoCommit(false);
 
-      sql.append("DELETE FROM T_SCM_BARCODE WHERE tradebarcode='");
+      sql.append(
+          "UPDATE T_SCM_BARCODE SET USEYN='N', USEYNREMARK= to_char(sysdate,'YYYYMMDDHH24MISS') WHERE tradebarcode='");
       sql.append(tradebarcode);
       sql.append("'");
       sql.append("AND pno = '");
@@ -16513,7 +16323,8 @@ public class WooboTechDao {
 
     System.out.println(sql.toString());
   }
-// 박스당입수수량 찾는 sql 
+
+  // 박스당입수수량 찾는 sql
   public String mng_box_qty(Map<String, String> param) throws SQLException {
 
     Connection conn = null;
@@ -16543,7 +16354,7 @@ public class WooboTechDao {
     return this.jdbcTemplate.queryForObject(sql.toString(), String.class);
   }
 
-//★★★★★삭제예정220726★★★★★
+  // ★★★★★삭제예정220726★★★★★
   public String mng_label_exist(Map<String, String> param) throws SQLException {
     String tradebarcode = param.get("tradebarcode");
     String pno = param.get("pno");
@@ -16595,6 +16406,7 @@ public class WooboTechDao {
     sql.append("AND         B.PNO ='");
     sql.append(pno);
     sql.append("'");
+    sql.append("AND         A.useyn ='Y'");
     sql.append("ORDER BY A.BARCODE");
 
     System.out.println(sql.toString());
@@ -16614,7 +16426,7 @@ public class WooboTechDao {
    * return (List<CoListDTO>) this.jdbcTemplate.query(sql.toString(), this.mapper17); }
    */
 
-  //협력사 관리 건수
+  // 협력사 관리 건수
   public int mng_partner_count(Map<String, String> param) {
 
     String cu_name = F.nullCheck(param.get("cu_name"), "");
@@ -16679,7 +16491,7 @@ public class WooboTechDao {
     return this.jdbcTemplate.queryForObject(sql.toString(), Integer.class);
   }
 
-  //협력사관리 페이지 데이터
+  // 협력사관리 페이지 데이터
   public List<PartnerDTO> mng_partner_list(Map<String, String> param, int page,
       int itemCountPerPage) {
 
@@ -16887,7 +16699,7 @@ public class WooboTechDao {
     return this.jdbcTemplate.queryForObject(sql.toString(), Integer.class);
   }
 
-  //관리자관리페이지 데이터
+  // 관리자관리페이지 데이터
   public List<MemberDTO> mng_member_list(Map<String, String> param, int page,
       int itemCountPerPage) {
 
@@ -17167,16 +16979,17 @@ public class WooboTechDao {
 
     return list;
   }
+
   // 구매계획관리 조회조건
-  public ArrayList<String> itemList(){
+  public ArrayList<String> itemList() {
     ArrayList<String> list = new ArrayList<String>();
-    
+
     Connection conn = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
 
     StringBuffer sql = new StringBuffer();
-    
+
     try {
       conn = dataSource.getConnection();
       conn.setAutoCommit(false);
@@ -17185,8 +16998,8 @@ public class WooboTechDao {
       sql.append(" FROM t_mi_typesub");
       sql.append(" WHERE typecode = 'MI043'");
       sql.append("order by sortidx");
-      //sql.append(custcode);
-     
+      // sql.append(custcode);
+
 
       pstmt = conn.prepareStatement(sql.toString());
       rs = pstmt.executeQuery();
@@ -17195,69 +17008,113 @@ public class WooboTechDao {
 
         String item = "";
         item = rs.getString("SUBNAME");
-       
-        //logger.info("결과값13:{}", item);
-    
+
+        // logger.info("결과값13:{}", item);
+
 
         ItemDTO dto = new ItemDTO();
         dto.setpItem(item);
         list.add(item);
 
       }
-      
+
 
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
       jFunction.close(rs, pstmt, conn);
     }
-    return list; 
+    return list;
+  }
+
+  public ArrayList<String> itemList2() {
+    ArrayList<String> list = new ArrayList<String>();
+
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+
+    StringBuffer sql = new StringBuffer();
+
+    try {
+      conn = dataSource.getConnection();
+      conn.setAutoCommit(false);
+
+      sql.append("SELECT *");
+      sql.append(" FROM t_mi_typesub");
+      sql.append(" WHERE typecode = 'MI043'");
+      sql.append("order by sortidx");
+      // sql.append(custcode);
+
+
+      pstmt = conn.prepareStatement(sql.toString());
+      rs = pstmt.executeQuery();
+
+      while (rs.next()) {
+
+        String item = "";
+        item = rs.getString("SUBNAME");
+
+        logger.info("결과값13:{}", item);
+
+
+        ItemDTO dto = new ItemDTO();
+        dto.setpItem(item);
+        list.add(item);
+
+      }
+
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      jFunction.close(rs, pstmt, conn);
+    }
+    return list;
   }
   
-  public ArrayList<String> itemList2(){
+  public String labelType(String cucode) {
     ArrayList<String> list = new ArrayList<String>();
-    
+
     Connection conn = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
-
+    String labeltype = "";
     StringBuffer sql = new StringBuffer();
-    
+
     try {
       conn = dataSource.getConnection();
       conn.setAutoCommit(false);
 
       sql.append("SELECT *");
-      sql.append(" FROM t_mi_typesub");
-      sql.append(" WHERE typecode = 'MI043'");
-      sql.append("order by sortidx");
-      //sql.append(custcode);
-     
+      sql.append(" FROM t_scm_cust");
+      sql.append(" WHERE custcode = '");
+      sql.append(cucode);
+      sql.append("'");
+      
+      // sql.append(custcode);
+
 
       pstmt = conn.prepareStatement(sql.toString());
       rs = pstmt.executeQuery();
 
       while (rs.next()) {
 
-        String item = "";
-        item = rs.getString("SUBNAME");
-       
-        logger.info("결과값13:{}", item);
-    
+        
+        labeltype = rs.getString("labeltype");
 
-        ItemDTO dto = new ItemDTO();
-        dto.setpItem(item);
-        list.add(item);
+        logger.info("결과값13:{}", labeltype);
+
 
       }
-      
+
 
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
       jFunction.close(rs, pstmt, conn);
     }
-    return list; 
+    return labeltype;
   }
 
 }

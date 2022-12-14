@@ -1,3 +1,4 @@
+<%@page import="org.apache.poi.util.SystemOutLogger"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.io.FileInputStream" %>   
@@ -20,9 +21,11 @@
 		out=pageContext.pushBody();
 		String chk = request.getParameter("chk");
 		String code = (String)session.getAttribute("cu_code");
+		String labelType = (String) request.getAttribute("labelType");
+		
 		try{
 			String fileName = "";
-			if(code.equals("4201")){
+			if(labelType.equals("B")){
 				if(chk.equals("1")){
 					fileName = "/report/WB_Label_90x55_AS.pdf";
 				}else{

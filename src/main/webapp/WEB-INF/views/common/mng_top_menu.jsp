@@ -152,7 +152,7 @@ function fnMangerSave(){
 	var new_pw_ok = $('#p_new_pw_ok').val();//211027 비밀번호 확인
 	var area = $('#area').val();
 	var payment =$('#ment').val();
-	
+	var labelType = $('#labelType').val();
 	//이메일 5개 추가 20220422 정인우
 	var email1 = $('#email1').val();
 	var email2 = $('#email2').val();
@@ -164,7 +164,7 @@ function fnMangerSave(){
 	var user3 = $('#user3').val();
 	var user4 = $('#user4').val();
 	var user5 = $('#user5').val();
-	
+	console.log("라벨타입"+labelType);
 	if(new_pw !=new_pw_ok ){//211027 변경된 비밀번호와 비밀번호 확인을 일치 하지 않을 경우
 		alert("변경 비밀번호와 비밀번호확인이 일치하지 않습니다. ");
 		return;
@@ -210,7 +210,8 @@ function fnMangerSave(){
 			user2 : user2,
 			user3 : user3,
 			user4 : user4,
-			user5 : user5
+			user5 : user5,
+			labelType : labelType
 		}
 	}).done(function(data) {
 		var isOk = data;
